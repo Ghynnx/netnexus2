@@ -106,11 +106,15 @@ public class mgusers extends javax.swing.JFrame {
         DltBttn = new javax.swing.JButton();
         backbtn1 = new javax.swing.JButton();
         userBtn = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         srchTF = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
         editpnl = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -154,50 +158,77 @@ public class mgusers extends javax.swing.JFrame {
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        AddBttn.setBackground(new java.awt.Color(255, 51, 0));
+        AddBttn.setForeground(new java.awt.Color(255, 255, 255));
         AddBttn.setText("Add User");
         AddBttn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AddBttnActionPerformed(evt);
             }
         });
-        jPanel1.add(AddBttn, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 100, -1));
+        jPanel1.add(AddBttn, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 150, -1));
 
+        EdtBttn.setBackground(new java.awt.Color(255, 51, 0));
+        EdtBttn.setForeground(new java.awt.Color(255, 255, 255));
         EdtBttn.setText("Edit User");
         EdtBttn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EdtBttnActionPerformed(evt);
             }
         });
-        jPanel1.add(EdtBttn, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, 100, -1));
+        jPanel1.add(EdtBttn, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 150, -1));
 
+        DltBttn.setBackground(new java.awt.Color(204, 0, 0));
+        DltBttn.setForeground(new java.awt.Color(255, 255, 255));
         DltBttn.setText("Delete User");
         DltBttn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 DltBttnActionPerformed(evt);
             }
         });
-        jPanel1.add(DltBttn, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 100, -1));
+        jPanel1.add(DltBttn, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, 150, -1));
 
+        backbtn1.setBackground(new java.awt.Color(0, 0, 0));
+        backbtn1.setForeground(new java.awt.Color(255, 255, 255));
         backbtn1.setText("Back");
         backbtn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backbtn1ActionPerformed(evt);
             }
         });
-        jPanel1.add(backbtn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(97, 14, 57, 17));
+        jPanel1.add(backbtn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 57, 17));
 
+        userBtn.setBackground(new java.awt.Color(255, 51, 0));
+        userBtn.setForeground(new java.awt.Color(255, 255, 255));
         userBtn.setText("Users");
         userBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 userBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(userBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 100, -1));
+        jPanel1.add(userBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 150, -1));
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(0, 0, 255));
+        jLabel13.setText("NET");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel14.setText("NEXUS");
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, -1, -1));
+
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel15.setText("INTERNET CAFE SOFTWARE");
+        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, -1));
 
         jPanel2.setLayout(new java.awt.CardLayout());
 
+        jPanel3.setBackground(new java.awt.Color(14, 14, 14));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jTable1.setBackground(new java.awt.Color(51, 51, 51));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -215,6 +246,8 @@ public class mgusers extends javax.swing.JFrame {
 
         jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 830, 320));
 
+        srchTF.setBackground(new java.awt.Color(14, 14, 14));
+        srchTF.setForeground(new java.awt.Color(255, 255, 255));
         srchTF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 srchTFKeyReleased(evt);
@@ -222,19 +255,27 @@ public class mgusers extends javax.swing.JFrame {
         });
         jPanel3.add(srchTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 350, -1));
 
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("Username:");
+        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, -1, -1));
+
         jPanel2.add(jPanel3, "card6");
 
+        editpnl.setBackground(new java.awt.Color(14, 14, 14));
         editpnl.setMinimumSize(new java.awt.Dimension(925, 500));
         editpnl.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Edit User");
         editpnl.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 80, -1, -1));
 
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Search Username:");
         editpnl.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, -1, 20));
 
-        EdtUsnTF.setText("Type Username");
+        EdtUsnTF.setBackground(new java.awt.Color(51, 51, 51));
         EdtUsnTF.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 EdtUsnTFMouseClicked(evt);
@@ -247,10 +288,12 @@ public class mgusers extends javax.swing.JFrame {
         });
         editpnl.add(EdtUsnTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 150, 165, -1));
 
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Edit Username:");
         editpnl.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 200, 95, -1));
 
-        EdtNewUsnTF.setText("Enter New Username");
+        EdtNewUsnTF.setBackground(new java.awt.Color(51, 51, 51));
+        EdtNewUsnTF.setForeground(new java.awt.Color(255, 255, 255));
         EdtNewUsnTF.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 EdtNewUsnTFMouseClicked(evt);
@@ -266,6 +309,8 @@ public class mgusers extends javax.swing.JFrame {
         jLabel10.setText("Balance:");
         editpnl.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 260, 99, -1));
 
+        EdtBlncTF.setBackground(new java.awt.Color(51, 51, 51));
+        EdtBlncTF.setForeground(new java.awt.Color(255, 255, 255));
         EdtBlncTF.setText("0.0");
         EdtBlncTF.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -279,16 +324,19 @@ public class mgusers extends javax.swing.JFrame {
         });
         editpnl.add(EdtBlncTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 280, 165, -1));
 
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("VIP Status:");
         editpnl.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 330, -1, -1));
 
+        EdtCb.setForeground(new java.awt.Color(255, 255, 255));
         EdtCb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "None", "Bronze", "Silver", "Gold" }));
         editpnl.add(EdtCb, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 330, -1, -1));
 
+        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setText("New Password:");
         editpnl.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 130, -1, -1));
 
-        EdtPssTF.setText("Type Password");
+        EdtPssTF.setBackground(new java.awt.Color(51, 51, 51));
         EdtPssTF.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 EdtPssTFMouseClicked(evt);
@@ -301,7 +349,8 @@ public class mgusers extends javax.swing.JFrame {
         });
         editpnl.add(EdtPssTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 150, 160, -1));
 
-        NewLogDtTF.setText("mm-dd-yyyy");
+        NewLogDtTF.setBackground(new java.awt.Color(51, 51, 51));
+        NewLogDtTF.setForeground(new java.awt.Color(255, 255, 255));
         NewLogDtTF.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 NewLogDtTFMouseClicked(evt);
@@ -314,9 +363,13 @@ public class mgusers extends javax.swing.JFrame {
         });
         editpnl.add(NewLogDtTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 220, 160, -1));
 
+        jLabel17.setForeground(new java.awt.Color(255, 255, 255));
         jLabel17.setText("New Login Date:");
         editpnl.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 200, 106, -1));
 
+        SveBttn.setBackground(new java.awt.Color(255, 51, 0));
+        SveBttn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SveBttn.setForeground(new java.awt.Color(255, 255, 255));
         SveBttn.setText("Save ");
         SveBttn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -328,6 +381,8 @@ public class mgusers extends javax.swing.JFrame {
         jLabel19.setText("New Time Session:");
         editpnl.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 260, -1, -1));
 
+        newEdittimeTF.setBackground(new java.awt.Color(51, 51, 51));
+        newEdittimeTF.setForeground(new java.awt.Color(255, 255, 255));
         newEdittimeTF.setText("00:00:00");
         newEdittimeTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -341,16 +396,21 @@ public class mgusers extends javax.swing.JFrame {
         });
         editpnl.add(newEdittimeTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 280, 160, -1));
 
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
         jLabel21.setText("Logins:");
         editpnl.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 330, -1, -1));
 
+        jTextField2.setForeground(new java.awt.Color(255, 255, 255));
         jTextField2.setText("0");
         editpnl.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 330, -1, -1));
 
         jPanel2.add(editpnl, "card2");
         editpnl.getAccessibleContext().setAccessibleDescription("");
 
-        AddUsnTF.setText("Enter Username");
+        addpnl.setBackground(new java.awt.Color(14, 14, 14));
+
+        AddUsnTF.setBackground(new java.awt.Color(51, 51, 51));
+        AddUsnTF.setForeground(new java.awt.Color(255, 255, 255));
         AddUsnTF.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 AddUsnTFMouseClicked(evt);
@@ -362,22 +422,29 @@ public class mgusers extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Add User");
 
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Username");
 
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Password:");
 
-        AddPssTF.setText("Enter Password");
+        AddPssTF.setBackground(new java.awt.Color(51, 51, 51));
+        AddPssTF.setForeground(new java.awt.Color(255, 255, 255));
         AddPssTF.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 AddPssTFMouseClicked(evt);
             }
         });
 
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Balance:");
 
+        AddBlncTF.setBackground(new java.awt.Color(51, 51, 51));
+        AddBlncTF.setForeground(new java.awt.Color(255, 255, 255));
         AddBlncTF.setText("0.0");
         AddBlncTF.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -395,8 +462,11 @@ public class mgusers extends javax.swing.JFrame {
             }
         });
 
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Login Date:");
 
+        AddLoginDteTF.setBackground(new java.awt.Color(51, 51, 51));
+        AddLoginDteTF.setForeground(new java.awt.Color(255, 255, 255));
         AddLoginDteTF.setText("mm-dd-yyyy");
         AddLoginDteTF.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -404,10 +474,14 @@ public class mgusers extends javax.swing.JFrame {
             }
         });
 
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("VIP Status:");
 
+        vipcmb.setForeground(new java.awt.Color(255, 255, 255));
         vipcmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "None", "Bronze", "Silver", "Gold" }));
 
+        addbtn.setBackground(new java.awt.Color(255, 51, 0));
+        addbtn.setForeground(new java.awt.Color(255, 255, 255));
         addbtn.setText("Add");
         addbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -415,8 +489,11 @@ public class mgusers extends javax.swing.JFrame {
             }
         });
 
+        jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setText("Time Session:");
 
+        addtimeTF.setBackground(new java.awt.Color(51, 51, 51));
+        addtimeTF.setForeground(new java.awt.Color(255, 255, 255));
         addtimeTF.setText("00:00:00");
         addtimeTF.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -429,8 +506,11 @@ public class mgusers extends javax.swing.JFrame {
             }
         });
 
+        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
         jLabel20.setText("Logins:");
 
+        jTextField1.setBackground(new java.awt.Color(51, 51, 51));
+        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
         jTextField1.setText("0");
 
         javax.swing.GroupLayout addpnlLayout = new javax.swing.GroupLayout(addpnl);
@@ -438,43 +518,46 @@ public class mgusers extends javax.swing.JFrame {
         addpnlLayout.setHorizontalGroup(
             addpnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addpnlLayout.createSequentialGroup()
-                .addGap(200, 200, 200)
                 .addGroup(addpnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(addpnlLayout.createSequentialGroup()
-                        .addGap(170, 170, 170)
-                        .addComponent(jLabel1))
-                    .addGroup(addpnlLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(187, 187, 187)
-                        .addComponent(jLabel3))
-                    .addComponent(jLabel4)
-                    .addGroup(addpnlLayout.createSequentialGroup()
-                        .addGroup(addpnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(AddUsnTF, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(AddBlncTF, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(addpnlLayout.createSequentialGroup()
-                                .addComponent(jLabel20)
-                                .addGap(43, 43, 43)
-                                .addComponent(jTextField1))
-                            .addGroup(addpnlLayout.createSequentialGroup()
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(vipcmb, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(227, 227, 227)
                         .addGroup(addpnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(addpnlLayout.createSequentialGroup()
-                                .addGap(69, 69, 69)
+                                .addGap(170, 170, 170)
+                                .addComponent(jLabel1))
+                            .addGroup(addpnlLayout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(187, 187, 187)
+                                .addComponent(jLabel3))
+                            .addComponent(jLabel4)
+                            .addGroup(addpnlLayout.createSequentialGroup()
+                                .addGroup(addpnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(AddUsnTF, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(AddBlncTF, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(addpnlLayout.createSequentialGroup()
+                                        .addComponent(jLabel20)
+                                        .addGap(43, 43, 43)
+                                        .addComponent(jTextField1))
+                                    .addGroup(addpnlLayout.createSequentialGroup()
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(vipcmb, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGroup(addpnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(AddPssTF, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(AddLoginDteTF, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addpnlLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(addpnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(addbtn)
-                                    .addComponent(jLabel18))
-                                .addGap(9, 9, 9)
-                                .addComponent(addtimeTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(58, 58, 58))
+                                    .addGroup(addpnlLayout.createSequentialGroup()
+                                        .addGap(69, 69, 69)
+                                        .addGroup(addpnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel5)
+                                            .addComponent(AddPssTF, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(AddLoginDteTF, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addpnlLayout.createSequentialGroup()
+                                        .addGap(7, 7, 7)
+                                        .addComponent(jLabel18)
+                                        .addGap(9, 9, 9)
+                                        .addComponent(addtimeTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                    .addGroup(addpnlLayout.createSequentialGroup()
+                        .addGap(404, 404, 404)
+                        .addComponent(addbtn)))
+                .addContainerGap())
         );
         addpnlLayout.setVerticalGroup(
             addpnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -508,9 +591,9 @@ public class mgusers extends javax.swing.JFrame {
                 .addGroup(addpnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(vipcmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addComponent(addbtn)
-                .addContainerGap(99, Short.MAX_VALUE))
+                .addGap(88, 88, 88))
         );
 
         jPanel2.add(addpnl, "card1");
@@ -1011,6 +1094,10 @@ public class mgusers extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
