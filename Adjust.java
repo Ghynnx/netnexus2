@@ -33,7 +33,7 @@ public class Adjust extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        AdjBttn = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jPanel3 = new javax.swing.JPanel();
         backBtn = new javax.swing.JButton();
@@ -78,11 +78,16 @@ public class Adjust extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("USERNAME");
 
-        jButton1.setBackground(new java.awt.Color(37, 99, 235));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ADJUST.png"))); // NOI18N
-        jButton1.setText("ADJUST");
+        AdjBttn.setBackground(new java.awt.Color(37, 99, 235));
+        AdjBttn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        AdjBttn.setForeground(new java.awt.Color(255, 255, 255));
+        AdjBttn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ADJUST.png"))); // NOI18N
+        AdjBttn.setText("ADJUST");
+        AdjBttn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AdjBttnActionPerformed(evt);
+            }
+        });
 
         jSeparator2.setForeground(new java.awt.Color(51, 65, 85));
 
@@ -109,7 +114,7 @@ public class Adjust extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(201, 201, 201)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(AdjBttn, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(175, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -128,7 +133,7 @@ public class Adjust extends javax.swing.JFrame {
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(AdjBttn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(56, 56, 56))
         );
 
@@ -243,6 +248,10 @@ public class Adjust extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
+    private void AdjBttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdjBttnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AdjBttnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -280,8 +289,8 @@ public class Adjust extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AdjBttn;
     private javax.swing.JButton backBtn;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

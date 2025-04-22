@@ -39,7 +39,7 @@ public class ChargeTime extends javax.swing.JFrame {
         jTextField3 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        ChrgBttn = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         backBtn5 = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
@@ -111,10 +111,16 @@ public class ChargeTime extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(37, 99, 235));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("CHARGE");
+        ChrgBttn.setBackground(new java.awt.Color(37, 99, 235));
+        ChrgBttn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        ChrgBttn.setForeground(new java.awt.Color(255, 255, 255));
+        ChrgBttn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Plus.png"))); // NOI18N
+        ChrgBttn.setText("CHARGE");
+        ChrgBttn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ChrgBttnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -144,7 +150,7 @@ public class ChargeTime extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(198, 198, 198)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(ChrgBttn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(122, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -165,7 +171,7 @@ public class ChargeTime extends javax.swing.JFrame {
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(ChrgBttn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(58, 58, 58))
         );
 
@@ -174,6 +180,7 @@ public class ChargeTime extends javax.swing.JFrame {
         backBtn5.setBackground(new java.awt.Color(255, 0, 0));
         backBtn5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         backBtn5.setForeground(new java.awt.Color(255, 255, 255));
+        backBtn5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/HOME.png"))); // NOI18N
         backBtn5.setText("HOME");
         backBtn5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -287,6 +294,10 @@ public class ChargeTime extends javax.swing.JFrame {
        dispose();
     }//GEN-LAST:event_backBtn5ActionPerformed
 
+    private void ChrgBttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChrgBttnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ChrgBttnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -323,8 +334,8 @@ public class ChargeTime extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ChrgBttn;
     private javax.swing.JButton backBtn5;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
