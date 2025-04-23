@@ -3,15 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-/**
- *
- * @author User
- */
+import java.io.FileReader;
+import java.io.FileWriter;
+import javax.swing.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class Adjust extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ADJUST
-     */
+    private static final String FILEPATH = "src/netnexus.json";
+
     public Adjust() {
         initComponents();
     }
@@ -29,8 +30,8 @@ public class Adjust extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        UsnTF = new javax.swing.JTextField();
+        TimeTF = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         AdjBttn = new javax.swing.JButton();
@@ -55,20 +56,20 @@ public class Adjust extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("ADJUST");
 
-        jTextField1.setBackground(new java.awt.Color(15, 23, 42));
-        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 65, 85)));
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        UsnTF.setBackground(new java.awt.Color(15, 23, 42));
+        UsnTF.setForeground(new java.awt.Color(255, 255, 255));
+        UsnTF.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 65, 85)));
+        UsnTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                UsnTFActionPerformed(evt);
             }
         });
 
-        jTextField2.setBackground(new java.awt.Color(15, 23, 42));
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField2.setText("0:00");
-        jTextField2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 65, 85)));
+        TimeTF.setBackground(new java.awt.Color(15, 23, 42));
+        TimeTF.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        TimeTF.setForeground(new java.awt.Color(255, 255, 255));
+        TimeTF.setText("0:00");
+        TimeTF.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 65, 85)));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -106,9 +107,9 @@ public class Adjust extends javax.swing.JFrame {
                                 .addGap(132, 132, 132)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(UsnTF, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(TimeTF, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(237, 237, 237)
                         .addComponent(jLabel1))
@@ -130,8 +131,8 @@ public class Adjust extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(UsnTF, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TimeTF, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
                 .addComponent(AdjBttn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(56, 56, 56))
@@ -156,20 +157,20 @@ public class Adjust extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator3)
+            .addComponent(jSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
+                .addGap(27, 27, 27))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(42, 42, 42)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         jLabel4.setFont(new java.awt.Font("SansSerif", 1, 36)); // NOI18N
@@ -244,12 +245,59 @@ public class Adjust extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void UsnTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsnTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_UsnTFActionPerformed
 
     private void AdjBttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdjBttnActionPerformed
-        // TODO add your handling code here:
+        String username = UsnTF.getText().trim();
+        String newTime = TimeTF.getText().trim();
+
+        if (username.isEmpty() || newTime.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill all fields.");
+            return;
+        }
+
+        try {
+            FileReader reader = new FileReader(FILEPATH);
+            StringBuilder sb = new StringBuilder();
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                sb.append((char) ch);
+            }
+            reader.close();
+
+            JSONObject json = new JSONObject(sb.toString());
+            JSONArray users = json.getJSONArray("users");
+
+            boolean found = false;
+            for (int i = 0; i < users.length(); i++) {
+                JSONObject user = users.getJSONObject(i);
+                if (user.getString("username").equalsIgnoreCase(username)) {
+                    user.put("userTime", newTime);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                JSONObject newUser = new JSONObject();
+                newUser.put("username", username);
+                newUser.put("userTime", newTime);
+                users.put(newUser); // Add new user to array
+            }
+
+            FileWriter writer = new FileWriter(FILEPATH);
+            writer.write(json.toString(4));
+            writer.close();
+
+            String message = found ? "Time adjusted successfully." : "New user added successfully.";
+            JOptionPane.showMessageDialog(this, message);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_AdjBttnActionPerformed
 
     /**
@@ -290,6 +338,8 @@ public class Adjust extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AdjBttn;
+    private javax.swing.JTextField TimeTF;
+    private javax.swing.JTextField UsnTF;
     private javax.swing.JButton backBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -303,7 +353,5 @@ public class Adjust extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

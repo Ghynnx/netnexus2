@@ -127,9 +127,9 @@
                                       <Component id="jLabel3" min="-2" pref="57" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <Component id="jTextField1" min="-2" pref="192" max="-2" attributes="0"/>
+                                      <Component id="UsnTF" min="-2" pref="192" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="jTextField2" min="-2" pref="71" max="-2" attributes="0"/>
+                                      <Component id="TimeTF" min="-2" pref="71" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -160,8 +160,8 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextField1" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
-                          <Component id="jTextField2" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                          <Component id="UsnTF" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                          <Component id="TimeTF" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="117" max="32767" attributes="0"/>
                       <Component id="AdjBttn" min="-2" pref="32" max="-2" attributes="0"/>
@@ -182,7 +182,7 @@
                 <Property name="text" type="java.lang.String" value="ADJUST"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField1">
+            <Component class="javax.swing.JTextField" name="UsnTF">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="2a" green="17" red="f" type="rgb"/>
@@ -199,10 +199,10 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="UsnTFActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField2">
+            <Component class="javax.swing.JTextField" name="TimeTF">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="2a" green="17" red="f" type="rgb"/>
@@ -291,11 +291,11 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jSeparator3" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jSeparator3" alignment="0" pref="200" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="34" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="backBtn" min="-2" pref="140" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -304,9 +304,9 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                       <Component id="jSeparator3" min="-2" pref="10" max="-2" attributes="0"/>
-                      <EmptySpace pref="57" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="backBtn" min="-2" pref="32" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                      <EmptySpace pref="28" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
