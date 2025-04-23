@@ -3,9 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.io.FileReader;
 import java.io.FileWriter;
 import javax.swing.JOptionPane;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.PlainDocument;
@@ -18,6 +22,10 @@ public class ChargeTime extends javax.swing.JFrame {
       
     public ChargeTime() {
         initComponents();
+        
+        ChrgBttn.setBorder(new ChargeTime.RoundedBorder(12));
+        HomeBttn.setBorder(new ChargeTime.RoundedBorder(12));
+        
         ((PlainDocument) TimeTF.getDocument()).addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
                 updateCostField();
@@ -54,7 +62,7 @@ public class ChargeTime extends javax.swing.JFrame {
         CostTF = new javax.swing.JTextField();
         ChrgBttn = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        backBtn5 = new javax.swing.JButton();
+        HomeBttn = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         jPanel4 = new javax.swing.JPanel();
 
@@ -190,14 +198,14 @@ public class ChargeTime extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(30, 41, 59));
 
-        backBtn5.setBackground(new java.awt.Color(255, 0, 0));
-        backBtn5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        backBtn5.setForeground(new java.awt.Color(255, 255, 255));
-        backBtn5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/HOME.png"))); // NOI18N
-        backBtn5.setText("HOME");
-        backBtn5.addActionListener(new java.awt.event.ActionListener() {
+        HomeBttn.setBackground(new java.awt.Color(255, 0, 0));
+        HomeBttn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        HomeBttn.setForeground(new java.awt.Color(255, 255, 255));
+        HomeBttn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/HOME.png"))); // NOI18N
+        HomeBttn.setText("HOME");
+        HomeBttn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backBtn5ActionPerformed(evt);
+                HomeBttnActionPerformed(evt);
             }
         });
 
@@ -207,20 +215,20 @@ public class ChargeTime extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator3)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(backBtn5, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+            .addComponent(jSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(HomeBttn, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(46, Short.MAX_VALUE)
+                .addContainerGap(23, Short.MAX_VALUE)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addComponent(backBtn5, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(HomeBttn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23))
         );
 
         jPanel4.setBackground(new java.awt.Color(4, 11, 31));
@@ -293,6 +301,31 @@ public class ChargeTime extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public class RoundedBorder implements Border {
+
+        private int radius;
+
+        public RoundedBorder(int radius) {
+            this.radius = radius;
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return new Insets(this.radius + 1, this.radius + 1, this.radius + 2, this.radius);
+        }
+
+        @Override
+        public boolean isBorderOpaque() {
+            return false;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            g.setColor(c.getForeground());
+            g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+        }
+    }
+    
     private void CostTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CostTFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_CostTFActionPerformed
@@ -301,11 +334,11 @@ public class ChargeTime extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_TimeTFActionPerformed
 
-    private void backBtn5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtn5ActionPerformed
+    private void HomeBttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HomeBttnActionPerformed
        Billing v = new Billing();
        v.setVisible(true);
        dispose();
-    }//GEN-LAST:event_backBtn5ActionPerformed
+    }//GEN-LAST:event_HomeBttnActionPerformed
 
     private void ChrgBttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChrgBttnActionPerformed
          String username = UsnTF.getText().trim();
@@ -429,9 +462,9 @@ public class ChargeTime extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ChrgBttn;
     private javax.swing.JTextField CostTF;
+    private javax.swing.JButton HomeBttn;
     private javax.swing.JTextField TimeTF;
     private javax.swing.JTextField UsnTF;
-    private javax.swing.JButton backBtn5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

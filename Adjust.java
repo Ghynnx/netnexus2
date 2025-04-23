@@ -3,9 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.io.FileReader;
 import java.io.FileWriter;
 import javax.swing.*;
+import javax.swing.border.Border;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,6 +19,9 @@ public class Adjust extends javax.swing.JFrame {
 
     public Adjust() {
         initComponents();
+        
+        AdjBttn.setBorder(new Adjust.RoundedBorder(12));
+        HomeBttn.setBorder(new Adjust.RoundedBorder(12));
     }
 
     /**
@@ -37,7 +44,7 @@ public class Adjust extends javax.swing.JFrame {
         AdjBttn = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jPanel3 = new javax.swing.JPanel();
-        backBtn = new javax.swing.JButton();
+        HomeBttn = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -141,13 +148,13 @@ public class Adjust extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(30, 41, 59));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 65, 85)));
 
-        backBtn.setBackground(new java.awt.Color(255, 0, 0));
-        backBtn.setForeground(new java.awt.Color(255, 255, 255));
-        backBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/HOME.png"))); // NOI18N
-        backBtn.setText("HOME");
-        backBtn.addActionListener(new java.awt.event.ActionListener() {
+        HomeBttn.setBackground(new java.awt.Color(255, 0, 0));
+        HomeBttn.setForeground(new java.awt.Color(255, 255, 255));
+        HomeBttn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/HOME.png"))); // NOI18N
+        HomeBttn.setText("HOME");
+        HomeBttn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backBtnActionPerformed(evt);
+                HomeBttnActionPerformed(evt);
             }
         });
 
@@ -157,20 +164,20 @@ public class Adjust extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+            .addComponent(jSeparator3)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
+                .addContainerGap(27, Short.MAX_VALUE)
+                .addComponent(HomeBttn, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(42, 42, 42)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(HomeBttn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jLabel4.setFont(new java.awt.Font("SansSerif", 1, 36)); // NOI18N
@@ -239,11 +246,36 @@ public class Adjust extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+    public class RoundedBorder implements Border {
+
+        private int radius;
+
+        public RoundedBorder(int radius) {
+            this.radius = radius;
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return new Insets(this.radius + 1, this.radius + 1, this.radius + 2, this.radius);
+        }
+
+        @Override
+        public boolean isBorderOpaque() {
+            return false;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            g.setColor(c.getForeground());
+            g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+        }
+    }
+    
+    private void HomeBttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HomeBttnActionPerformed
         Billing v = new Billing();
         v.setVisible(true);
         dispose();
-    }//GEN-LAST:event_backBtnActionPerformed
+    }//GEN-LAST:event_HomeBttnActionPerformed
 
     private void UsnTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsnTFActionPerformed
         // TODO add your handling code here:
@@ -338,9 +370,9 @@ public class Adjust extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AdjBttn;
+    private javax.swing.JButton HomeBttn;
     private javax.swing.JTextField TimeTF;
     private javax.swing.JTextField UsnTF;
-    private javax.swing.JButton backBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
