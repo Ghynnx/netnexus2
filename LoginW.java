@@ -12,6 +12,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import java.io.FileWriter;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Random;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 /**
  *
@@ -30,7 +37,33 @@ public class LoginW extends javax.swing.JFrame {
      * Creates new form LoginW
      */
     public LoginW() {
-        initComponents();
+        initComponents(); // sets up jPanel2 for the login form
+        initComponents(); // creates jPanel2 (login form)
+
+        BouncingTextPanel animatedBackground = new BouncingTextPanel();
+        animatedBackground.setLayout(null);
+
+        jPanel2.setBounds(320, 100, 340, 360); // manually position login form
+        animatedBackground.add(jPanel2);
+
+        // Add listener to spawn NetNexus texts on key press
+        nameTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                animatedBackground.addNewText();
+            }
+        });
+
+        passPF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                animatedBackground.addNewText();
+            }
+        });
+
+        // Final UI setup
+        setContentPane(animatedBackground);
+        setSize(1000, 600);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     /**
@@ -43,23 +76,19 @@ public class LoginW extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         nameTF = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         passPF = new javax.swing.JPasswordField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         loginBtn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(15, 23, 42));
         jPanel1.setForeground(new java.awt.Color(51, 51, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel1.setFont(new java.awt.Font("Palatino Linotype", 1, 36)); // NOI18N
-        jLabel1.setText("LOGIN");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Username:");
 
         nameTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -70,6 +99,9 @@ public class LoginW extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Password:");
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setText("Username:");
+
         loginBtn.setText("Login");
         loginBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,52 +109,192 @@ public class LoginW extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Palatino Linotype", 1, 36)); // NOI18N
+        jLabel1.setText("LOGIN");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(52, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(passPF, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nameTF, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(36, 36, 36))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(123, 123, 123))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(101, 101, 101))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(54, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(nameTF, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(passPF, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52)
+                .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
+        );
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 100, 340, 360));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(387, 387, 387)
-                                .addComponent(jLabel1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(330, 330, 330)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(nameTF)
-                                    .addComponent(passPF, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE))))
-                        .addGap(0, 398, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(424, 424, 424)
-                        .addComponent(loginBtn)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(93, 93, 93)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nameTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(passPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addComponent(loginBtn)
-                .addContainerGap(167, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    class BouncingTextPanel extends JPanel implements ActionListener, MouseMotionListener {
+
+        private final java.util.List<TextObject> texts = new java.util.ArrayList<>();
+        private Timer timer;
+        private Point mousePoint = null;
+        private final Font font = new Font("Arial", Font.BOLD, 32);
+
+        public BouncingTextPanel() {
+            setOpaque(true);
+            setBackground(new Color(15, 23, 42));
+            timer = new Timer(20, this);
+            timer.start();
+            addMouseMotionListener(this);
+
+            // Start with one bouncing "NetNexus"
+            addNewText();
+        }
+
+        public void addNewText() {
+            texts.add(new TextObject("NetNexus"));
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+
+            for (TextObject t : texts) {
+                t.update(getWidth(), getHeight());
+                t.draw(g2d, font);
+            }
+
+            if (mousePoint != null) {
+                g2d.setColor(Color.YELLOW);
+                g2d.setFont(font);
+                g2d.drawString("NetNexus", mousePoint.x - 50, mousePoint.y - 10);
+            }
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            repaint();
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            mousePoint = e.getPoint();
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            mousePoint = e.getPoint();
+        }
+
+        class TextObject {
+
+            int x, y, dx, dy;
+            Color color;
+            final String text;
+
+            public TextObject(String text) {
+                this.text = text;
+                Random r = new Random();
+                x = r.nextInt(600);
+                y = r.nextInt(400);
+                dx = r.nextInt(3) + 2;
+                dy = r.nextInt(3) + 2;
+                color = getRandomColor();
+            }
+
+            void update(int w, int h) {
+                if (x <= 0 || x + 100 > w) {
+                    dx *= -1;
+                    color = getRandomColor();
+                }
+                if (y <= 30 || y + 30 > h) {
+                    dy *= -1;
+                    color = getRandomColor();
+                }
+                x += dx;
+                y += dy;
+            }
+
+            void draw(Graphics2D g, Font font) {
+                g.setFont(font);
+                g.setColor(color);
+                g.drawString(text, x, y);
+            }
+
+            private Color getRandomColor() {
+                Random r = new Random();
+                return new Color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
+            }
+        }
+    }
+
+    public static class SplashScreen extends JWindow {
+
+        private JProgressBar progressBar = new JProgressBar();
+
+        public SplashScreen() {
+            JPanel panel = new JPanel(new BorderLayout());
+            JLabel label = new JLabel("Loading NetNexus...", JLabel.CENTER);
+            label.setFont(new Font("Arial", Font.BOLD, 24));
+            label.setForeground(Color.WHITE);
+            panel.setBackground(new Color(15, 23, 42));
+            progressBar.setStringPainted(true);
+            panel.add(label, BorderLayout.CENTER);
+            panel.add(progressBar, BorderLayout.SOUTH);
+            setContentPane(panel);
+            setSize(400, 200);
+            setLocationRelativeTo(null);
+        }
+
+        public void showSplash() {
+            setVisible(true);
+            for (int i = 0; i <= 100; i++) {
+                try {
+                    progressBar.setValue(i);
+                    Thread.sleep(30); // simulate loading
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            setVisible(false);
+            dispose();
+        }
+    }
 
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
 
@@ -179,52 +351,52 @@ public class LoginW extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_nameTFActionPerformed
     private void updateSessionStartTime() {
-    try {
-        // Ensure the session array exists in the record
-        JSONArray sessions = (JSONArray) record.getOrDefault("sessions", new JSONArray());
+        try {
+            // Ensure the session array exists in the record
+            JSONArray sessions = (JSONArray) record.getOrDefault("sessions", new JSONArray());
 
-        boolean sessionFound = false;
-        for (int i = 0; i < sessions.size(); i++) {
-            JSONObject session = (JSONObject) sessions.get(i);
-            String username = (String) session.get("username");
+            boolean sessionFound = false;
+            for (int i = 0; i < sessions.size(); i++) {
+                JSONObject session = (JSONObject) sessions.get(i);
+                String username = (String) session.get("username");
 
-            if (username.equals(usname)) { // Match the username
-                sessionFound = true;
-                session.put("startTime", getCurrentTime()); // Update start time to current time
-                session.put("active", true); // Activate the session
-                break;
-            }
-        }
-
-        if (!sessionFound) {
-            // Retrieve the user's balance from the users array
-            double balance = 0;
-            for (Object userObj : users) {
-                JSONObject user = (JSONObject) userObj;
-                if (usname.equals(user.get("username"))) {
-                    balance = Double.parseDouble(user.getOrDefault("amount", "0").toString()); // Default to 0 if balance is missing
+                if (username.equals(usname)) { // Match the username
+                    sessionFound = true;
+                    session.put("startTime", getCurrentTime()); // Update start time to current time
+                    session.put("active", true); // Activate the session
                     break;
                 }
             }
 
-            // Calculate userTime based on the user's balance
-            String userTime = calculateUserTime((long) balance);
+            if (!sessionFound) {
+                // Retrieve the user's balance from the users array
+                double balance = 0;
+                for (Object userObj : users) {
+                    JSONObject user = (JSONObject) userObj;
+                    if (usname.equals(user.get("username"))) {
+                        balance = Double.parseDouble(user.getOrDefault("amount", "0").toString()); // Default to 0 if balance is missing
+                        break;
+                    }
+                }
 
-            // Create a new session for this user
-            JSONObject newSession = new JSONObject();
-            newSession.put("username", usname);
-            newSession.put("startTime", getCurrentTime());
-            newSession.put("userTime", userTime); // Dynamically set user time
-            newSession.put("remainingTime", userTime); // Remaining time matches user time at the start
-            newSession.put("active", true);
-            sessions.add(newSession); // Add the new session to the sessions array
+                // Calculate userTime based on the user's balance
+                String userTime = calculateUserTime((long) balance);
+
+                // Create a new session for this user
+                JSONObject newSession = new JSONObject();
+                newSession.put("username", usname);
+                newSession.put("startTime", getCurrentTime());
+                newSession.put("userTime", userTime); // Dynamically set user time
+                newSession.put("remainingTime", userTime); // Remaining time matches user time at the start
+                newSession.put("active", true);
+                sessions.add(newSession); // Add the new session to the sessions array
+            }
+
+            record.put("sessions", sessions); // Update the sessions array in the record
+        } catch (Exception e) {
+            System.err.println("Error updating session start time: " + e.getMessage());
         }
-
-        record.put("sessions", sessions); // Update the sessions array in the record
-    } catch (Exception e) {
-        System.err.println("Error updating session start time: " + e.getMessage());
     }
-}
 
     private String getCurrentTime() {
         // Return the current time in HH:mm:ss format
@@ -237,12 +409,12 @@ public class LoginW extends javax.swing.JFrame {
     }
 
     private String calculateUserTime(double balance) {
-    int timeInSeconds = (int) ((balance / 20) * 3600); // 1 hour per 20 balance
-    int hours = timeInSeconds / 3600;
-    int minutes = (timeInSeconds % 3600) / 60;
-    int seconds = timeInSeconds % 60;
-    return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-}
+        int timeInSeconds = (int) ((balance / 20) * 3600); // 1 hour per 20 balance
+        int hours = timeInSeconds / 3600;
+        int minutes = (timeInSeconds % 3600) / 60;
+        int seconds = timeInSeconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
 
     /**
      * @param args the command line arguments
@@ -264,12 +436,23 @@ public class LoginW extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(LoginW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(LoginW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
 
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new LoginW().setVisible(true);
+            SplashScreen splash = new SplashScreen();
+            splash.showSplash();
+
+            LoginW login = new LoginW();
+            login.setVisible(true);
         });
     }
 
@@ -304,6 +487,7 @@ public class LoginW extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JButton loginBtn;
     private javax.swing.JTextField nameTF;
     private javax.swing.JPasswordField passPF;
