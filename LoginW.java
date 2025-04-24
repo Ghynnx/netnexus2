@@ -1,22 +1,22 @@
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import java.io.FileWriter;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import java.io.FileWriter;
+import java.util.Date;
+import org.json.simple.JSONObject;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -302,157 +302,134 @@ public class LoginW extends javax.swing.JFrame {
         }
     }
 
-    public static class SplashScreen extends JWindow {
-
-        private JProgressBar progressBar = new JProgressBar();
-
-        public SplashScreen() {
-            JPanel panel = new JPanel(new BorderLayout());
-            JLabel label = new JLabel("Loading NetNexus...", JLabel.CENTER);
-            label.setFont(new Font("Arial", Font.BOLD, 24));
-            label.setForeground(Color.WHITE);
-            panel.setBackground(new Color(15, 23, 42));
-            progressBar.setStringPainted(true);
-            panel.add(label, BorderLayout.CENTER);
-            panel.add(progressBar, BorderLayout.SOUTH);
-            setContentPane(panel);
-            setSize(400, 200);
-            setLocationRelativeTo(null);
-        }
-
-        public void showSplash() {
-            setVisible(true);
-            for (int i = 0; i <= 100; i++) {
-                try {
-                    progressBar.setValue(i);
-                    Thread.sleep(30); // simulate loading
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            setVisible(false);
-            dispose();
-        }
-    }
-
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
-
+        String usernameInput = nameTF.getText().trim(); // Get username input
+        String passwordInput = new String(passPF.getPassword()).trim(); // Get password input
         try {
-            usname = nameTF.getText();
-            pass = passPF.getText();
-
-            try {
-                filecheck();
-            } catch (FileNotFoundException | org.json.simple.parser.ParseException ex) {
-                Logger.getLogger(LoginW.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            int checker = 0;
-            for (int a = 0; a < users.size(); a++) {
-                JSONObject userObject = (JSONObject) users.get(a);
-                String searchedUname = (String) userObject.get("username");
-                String searchedPswd = (String) userObject.get("password");
-                long balance = (long) userObject.getOrDefault("balance", 0L); // Retrieve balance
-
-                if (usname.equals(searchedUname) && pass.equals(searchedPswd)) {
-                    if (balance <= 0) {
-                        JOptionPane.showMessageDialog(this, "Login failed: Your balance is zero. Please top up your account.", "Login Failed", JOptionPane.ERROR_MESSAGE);
-                        return; // Exit the method to prevent login
-                    }
-
-                    checker++;
-                    long logins = (long) userObject.getOrDefault("logins", 0L);
-                    userObject.put("logins", logins + 1);
-
-                    // Set or update the session start time
-                    updateSessionStartTime();
-
-                    break;
-                }
-            }
-
-            if (checker == 0) {
-                JOptionPane.showMessageDialog(this, "No account has been found.", "Login Failed", JOptionPane.ERROR_MESSAGE);
-            } else {
-                dispose(); // Close login window and open dashboard
-                Admin x = new Admin();
-                x.setVisible(true);
-            }
-
-            save();
+            handleUserLogin(usernameInput, passwordInput);
         } catch (IOException ex) {
             Logger.getLogger(LoginW.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }//GEN-LAST:event_loginBtnActionPerformed
 
     private void nameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_nameTFActionPerformed
-    private void updateSessionStartTime() {
+    public void handleUserLogin(String usernameInput, String passwordInput) throws IOException {
         try {
-            // Ensure the session array exists in the record
-            JSONArray sessions = (JSONArray) record.getOrDefault("sessions", new JSONArray());
+            filecheck(); // Verify file existence and parse user data
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "User database file not found.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        } catch (org.json.simple.parser.ParseException ex) {
+            JOptionPane.showMessageDialog(this, "Error parsing user database file.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-            boolean sessionFound = false;
-            for (int i = 0; i < sessions.size(); i++) {
-                JSONObject session = (JSONObject) sessions.get(i);
-                String username = (String) session.get("username");
+        boolean isUserFound = false;
 
-                if (username.equals(usname)) { // Match the username
-                    sessionFound = true;
-                    session.put("startTime", getCurrentTime()); // Update start time to current time
-                    session.put("active", true); // Activate the session
-                    break;
-                }
-            }
+        for (int i = 0; i < users.size(); i++) {
+            JSONObject userObject = (JSONObject) users.get(i);
 
-            if (!sessionFound) {
-                // Retrieve the user's balance from the users array
-                double balance = 0;
-                for (Object userObj : users) {
-                    JSONObject user = (JSONObject) userObj;
-                    if (usname.equals(user.get("username"))) {
-                        balance = Double.parseDouble(user.getOrDefault("amount", "0").toString()); // Default to 0 if balance is missing
-                        break;
-                    }
+            // Validate if the username and password match
+            if (isLoginValid(userObject, usernameInput, passwordInput)) {
+                isUserFound = true;
+
+                if (isAdmin(usernameInput)) {
+                    // Redirect admin to Admin.java without updating session time
+                    redirectToAdmin();
+                    return;
                 }
 
-                // Calculate userTime based on the user's balance
-                String userTime = calculateUserTime((long) balance);
+                // Check user balance and handle session update
+                if (!processRegularUserLogin(userObject)) {
+                    return; // Stop processing if balance is insufficient
+                }
 
-                // Create a new session for this user
-                JSONObject newSession = new JSONObject();
-                newSession.put("username", usname);
-                newSession.put("startTime", getCurrentTime());
-                newSession.put("userTime", userTime); // Dynamically set user time
-                newSession.put("remainingTime", userTime); // Remaining time matches user time at the start
-                newSession.put("active", true);
-                sessions.add(newSession); // Add the new session to the sessions array
+                // Redirect to Members.java
+                redirectToMembers();
+                break;
             }
+        }
 
-            record.put("sessions", sessions); // Update the sessions array in the record
-        } catch (Exception e) {
-            System.err.println("Error updating session start time: " + e.getMessage());
+        if (!isUserFound) {
+            JOptionPane.showMessageDialog(this, "No account has been found.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+        }
+
+        try {
+            save(); // Save updated user data back to file
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error saving user data.", "Error", JOptionPane.ERROR_MESSAGE);
+            throw ex;
         }
     }
 
-    private String getCurrentTime() {
-        // Return the current time in HH:mm:ss format
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        return sdf.format(new Date());
+    // Validate if the username and password match
+    private boolean isLoginValid(JSONObject userObject, String usernameInput, String passwordInput) {
+        String storedUsername = ((String) userObject.get("username")).toLowerCase(); // Case-insensitive username
+        String storedPassword = (String) userObject.get("password"); // Case-sensitive password
+
+        return usernameInput.toLowerCase().equals(storedUsername) && passwordInput.equals(storedPassword);
+    }
+
+    // Check if the user is an admin
+    private boolean isAdmin(String usernameInput) {
+        return "admin".equalsIgnoreCase(usernameInput);
+    }
+
+    // Process login for regular users
+    private boolean processRegularUserLogin(JSONObject userObject) {
+        long balance = getBalance(userObject);
+
+        if (balance <= 0) {
+            JOptionPane.showMessageDialog(this, "Login failed: Your balance is zero. Please top up your account.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            return false; // Stop login process if balance is insufficient
+        }
+
+        // Increment login count
+        long logins = (long) userObject.getOrDefault("logins", 0L);
+        userObject.put("logins", logins + 1);
+
+        // Update session start time
+        updateSessionStartTime(userObject);
+
+        return true;
+    }
+
+    // Safely retrieve and convert balance to long
+    private long getBalance(JSONObject userObject) {
+        Object balanceObj = userObject.getOrDefault("amount", 0L);
+
+        if (balanceObj instanceof String) {
+            return Long.parseLong((String) balanceObj); // Convert String to Long
+        } else if (balanceObj instanceof Number) {
+            return ((Number) balanceObj).longValue(); // Handle numeric types directly
+        }
+        return 0L; // Default to 0 if the type is unexpected
+    }
+
+    // Update the session start time for regular users
+    private void updateSessionStartTime(JSONObject userObject) {
+        String currentTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date());
+        userObject.put("startTime", currentTime); // Update start time with the current time
+    }
+
+    // Redirect the admin to the Admin.java screen
+    private void redirectToAdmin() {
+        dispose(); // Close the login window
+        Admin adminScreen = new Admin();
+        adminScreen.setVisible(true);
+    }
+
+    // Redirect a regular user to the Members.java screen
+    private void redirectToMembers() {
+        dispose(); // Close the login window
+        Members memberScreen = new Members();
+        memberScreen.setVisible(true);
     }
 
     public static String getusname() {
         return usname;
-    }
-
-    private String calculateUserTime(double balance) {
-        int timeInSeconds = (int) ((balance / 20) * 3600); // 1 hour per 20 balance
-        int hours = timeInSeconds / 3600;
-        int minutes = (timeInSeconds % 3600) / 60;
-        int seconds = timeInSeconds % 60;
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     /**
@@ -487,40 +464,28 @@ public class LoginW extends javax.swing.JFrame {
         }
 
         java.awt.EventQueue.invokeLater(() -> {
-            SplashScreen splash = new SplashScreen();
-            splash.showSplash();
-
             LoginW login = new LoginW();
             login.setVisible(true);
         });
     }
 
     public static void filecheck() throws FileNotFoundException, IOException, org.json.simple.parser.ParseException {
-        FileReader reader = new FileReader(filepath);
-
-        if (reader.ready()) {
-            Scanner scan = new Scanner(reader);
-            String line = "";
-
-            while (scan.hasNext()) {
-                line = line + scan.nextLine();
-            }
-
-            if (!line.equals("")) {
-                reader.close();
-                try (FileReader read = new FileReader(filepath)) {
-                    record = (JSONObject) jsonParser.parse(read);
-                    users = (JSONArray) record.get("users");
-                }
-            }
+        try (FileReader reader = new FileReader(filepath)) {
+            record = (JSONObject) jsonParser.parse(reader); // Parse the JSON file
+            users = (JSONArray) record.get("users"); // Extract the "users" array
         }
     }
 
     public static void save() throws IOException {
         try (FileWriter file = new FileWriter(filepath)) {
             file.write(record.toJSONString());
+            file.flush();
+        } catch (IOException e) {
+            Logger.getLogger(LoginW.class.getName()).log(Level.SEVERE, null, e);
+            throw e;
         }
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
