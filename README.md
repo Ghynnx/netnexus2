@@ -1,2 +1,6 @@
 # NetNexus2
-Memmbers Mitch Eucare - Project Manager Rex Salibay - Designer Relpando Saquilon - Documenter
+GROUP 9
+Members 
+Mitch Eucare - Project Manager 
+Rex Salibay - Designer 
+Relpando Saquilon - Documenter
