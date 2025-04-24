@@ -19,6 +19,8 @@ import java.util.Date;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import java.awt.*;
+import javax.swing.border.Border;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -37,6 +39,52 @@ public class mgusers extends javax.swing.JFrame {
 
     public mgusers() {
         initComponents();
+
+        // Now apply the rounded border to your buttons
+        SveBttn.setBorder(new RoundedBorder(12));
+        AddBttn.setBorder(new RoundedBorder(12));
+        EdtBttn.setBorder(new RoundedBorder(12));
+        DltBttn.setBorder(new RoundedBorder(12));
+        userBtn.setBorder(new RoundedBorder(12));
+        backbtn1.setBorder(new RoundedBorder(12));
+
+        jScrollPane1.getViewport().setBackground(new java.awt.Color(24, 26, 32));
+        jTable1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12));
+        jTable1.setForeground(new java.awt.Color(255, 255, 255));
+        jTable1.setBackground(new java.awt.Color(24, 26, 32));
+        jTable1.setGridColor(new java.awt.Color(33, 35, 44));
+        jTable1.setRowHeight(24);
+        jTable1.setSelectionBackground(new java.awt.Color(30, 41, 59));
+        jTable1.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        jTable1.setShowGrid(true);
+
+        // Header Styling
+        javax.swing.table.JTableHeader header = jTable1.getTableHeader();
+        header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
+        header.setForeground(new java.awt.Color(255, 255, 255));
+        header.setBackground(new java.awt.Color(33, 35, 44));
+        header.setOpaque(true);
+
+        header.setDefaultRenderer(new javax.swing.table.DefaultTableCellRenderer() {
+            {
+                setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
+                setForeground(new java.awt.Color(255, 255, 255));
+                setBackground(new java.awt.Color(24, 26, 32));
+                setOpaque(true);
+                setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            }
+        });
+
+        // Cell Renderer for all cells
+        javax.swing.table.DefaultTableCellRenderer cellRenderer = new javax.swing.table.DefaultTableCellRenderer();
+        cellRenderer.setBackground(new java.awt.Color(33, 35, 44));
+        cellRenderer.setForeground(new java.awt.Color(255, 255, 255));
+        cellRenderer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        // Apply renderer to all columns
+        for (int i = 0; i < jTable1.getColumnCount(); i++) {
+            jTable1.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
+        }
 
         setupRowSelectionListener();
         try {
@@ -89,6 +137,31 @@ public class mgusers extends javax.swing.JFrame {
             });
         } else {
             sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText));
+        }
+    }
+
+    public class RoundedBorder implements Border {
+
+        private int radius;
+
+        public RoundedBorder(int radius) {
+            this.radius = radius;
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return new Insets(this.radius + 1, this.radius + 1, this.radius + 2, this.radius);
+        }
+
+        @Override
+        public boolean isBorderOpaque() {
+            return false;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            g.setColor(c.getForeground());
+            g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
         }
     }
 
@@ -632,7 +705,7 @@ public class mgusers extends javax.swing.JFrame {
     }//GEN-LAST:event_NewLogDtTFActionPerformed
 
     private void backbtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbtn1ActionPerformed
-        new Admin().setVisible(true);
+
     }//GEN-LAST:event_backbtn1ActionPerformed
 
     private void SrchClrBttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SrchClrBttnActionPerformed
@@ -996,51 +1069,51 @@ public class mgusers extends javax.swing.JFrame {
     }
 
     private void removeUsersInactiveFor30Days() throws FileNotFoundException, IOException, ParseException {
-        
-            File file = new File(filepath);
-            if (!file.exists()) {
-                System.err.println("JSON file not found. Skipping removal process.");
-                return;
-            }
 
-            JSONParser parser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader(file));
-            JSONArray userss = (JSONArray) jsonObject.get("users");
-
-            long currentTime = System.currentTimeMillis();
-            long thirtyDaysInMillis = 30L * 24 * 60 * 60 * 1000;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            boolean[] updated = {false};
-            userss.removeIf((Object obj) -> {
-                JSONObject user = (JSONObject) obj;
-                String lastLoginDateStr = (String) user.get("lastLogin");
-                if (lastLoginDateStr == null) {
-                    return false;
-                }
-                try {
-                    Date lastLoginDate = dateFormat.parse(lastLoginDateStr);
-                    long lastLoginTime = lastLoginDate.getTime();
-                    if ((currentTime - lastLoginTime) >= thirtyDaysInMillis) {
-                        updated[0] = true;
-                        return true;
-                    }
-                } catch (java.text.ParseException e) {
-                    System.err.println("Invalid date format for lastLogin: " + lastLoginDateStr);
-                }
-                return false;
-            });
-            if (updated[0]) {
-                try (FileWriter writer = new FileWriter(file)) {
-                    writer.write(jsonObject.toJSONString());
-                } catch (IOException ex) {
-                    Logger.getLogger(mgusers.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                System.out.println("Removed users inactive for 30 days or more successfully.");
-            } else {
-                System.out.println("No users found inactive for 30 days or more.");
-            }
+        File file = new File(filepath);
+        if (!file.exists()) {
+            System.err.println("JSON file not found. Skipping removal process.");
+            return;
         }
-    
+
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(new FileReader(file));
+        JSONArray userss = (JSONArray) jsonObject.get("users");
+
+        long currentTime = System.currentTimeMillis();
+        long thirtyDaysInMillis = 30L * 24 * 60 * 60 * 1000;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        boolean[] updated = {false};
+        userss.removeIf((Object obj) -> {
+            JSONObject user = (JSONObject) obj;
+            String lastLoginDateStr = (String) user.get("lastLogin");
+            if (lastLoginDateStr == null) {
+                return false;
+            }
+            try {
+                Date lastLoginDate = dateFormat.parse(lastLoginDateStr);
+                long lastLoginTime = lastLoginDate.getTime();
+                if ((currentTime - lastLoginTime) >= thirtyDaysInMillis) {
+                    updated[0] = true;
+                    return true;
+                }
+            } catch (java.text.ParseException e) {
+                System.err.println("Invalid date format for lastLogin: " + lastLoginDateStr);
+            }
+            return false;
+        });
+        if (updated[0]) {
+            try (FileWriter writer = new FileWriter(file)) {
+                writer.write(jsonObject.toJSONString());
+            } catch (IOException ex) {
+                Logger.getLogger(mgusers.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println("Removed users inactive for 30 days or more successfully.");
+        } else {
+            System.out.println("No users found inactive for 30 days or more.");
+        }
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField AddBlncTF;
