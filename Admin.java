@@ -1,4 +1,3 @@
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -6,13 +5,13 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import java.util.logging.Logger;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -24,26 +23,28 @@ import java.util.logging.Logger;
  */
 public class Admin extends javax.swing.JFrame {
 
+    private static final String FILE_PATH = "src\\netnexus.json";
+    private static final Logger LOGGER = Logger.getLogger(Admin.class.getName());
+    private static final double RATE_PER_HOUR = 20.0;
+
     private javax.swing.Timer dynamicTimer;
-    private final String filepath = "src\\netnexus.json"; // Update with your JSON file path
-       private static final Logger LOGGER = Logger.getLogger(Admin.class.getName());
 
-// Example: Replace System.out.println with LOGGER
-public Admin() {
-    initComponents();
-    LOGGER.info("Initializing components.");
-    startAutoLogoutCheck();
-    loadSessionData();
-    updateStatistics();
-}
+    public Admin() {
+        initComponents();
+        LOGGER.info("Initializing components.");
+        loadSessionData();
+        startAutoLogoutCheck();
+         updateStatistics();
+    }
 
+    /**
+     * Loads session data from the JSON file and populates the JTable.
+     */
     private void loadSessionData() {
-        System.out.println("Loading session data...");
-        File file = new File(filepath);
+        File file = new File(FILE_PATH);
 
         if (!file.exists()) {
-            JOptionPane.showMessageDialog(this, "JSON file not found at: " + filepath, "Error", JOptionPane.ERROR_MESSAGE);
-            System.err.println("JSON file not found at: " + filepath);
+            showError("JSON file not found at: " + FILE_PATH);
             return;
         }
 
@@ -52,94 +53,270 @@ public Admin() {
             JSONObject jsonObject = (JSONObject) parser.parse(reader);
             JSONArray sessions = (JSONArray) jsonObject.get("sessions");
 
-            // Initialize table model
             DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
             tableModel.setRowCount(0); // Clear existing rows
 
             for (Object obj : sessions) {
                 JSONObject session = (JSONObject) obj;
 
-                // Safely extract session data
-                Integer pcNo = session.get("pcNo") != null ? Integer.valueOf(session.get("pcNo").toString()) : null;
-                String username = session.get("username") != null ? session.get("username").toString() : "N/A";
-                String remainingTime = session.get("remainingTime") != null ? session.get("remainingTime").toString() : "00:00:00";
+                Integer pcNo = getInteger(session, "pcNo");
+                String username = getString(session, "username", "N/A");
+                String remainingTime = getString(session, "remainingTime", "00:00:00");
                 Boolean isActive = (Boolean) session.get("active");
 
-                // Add only active sessions to the JTable
-                if (isActive != null && isActive) {
+                if (Boolean.TRUE.equals(isActive)) {
                     tableModel.addRow(new Object[]{pcNo, username, remainingTime});
-                    System.out.println("Added session to table: PC No = " + pcNo + ", Username = " + username + ", Remaining Time = " + remainingTime);
                 }
             }
-            System.out.println("Session data loaded successfully.");
         } catch (IOException | ParseException e) {
-            JOptionPane.showMessageDialog(this, "Error loading session data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            System.err.println("Error loading session data: " + e.getMessage());
+            showError("Error loading session data: " + e.getMessage());
         }
-
-        // Start the timer for dynamic updates
-        startDynamicTimer();
     }
 
-    private void updateStatistics() {
-        System.out.println("Updating statistics...");
-        double totalRevenue = 0.0;
-        int totalUsers = 0;
-        int activeSessions = 0;
-        String todayDate = getTodayDate(); // Get today's date
+    /**
+     * Starts the timer to handle auto-logout and session updates.
+     */
+    private void startAutoLogoutCheck() {
+        dynamicTimer = new javax.swing.Timer(1000, e -> {
+            updateRemainingTime();
+            checkAndLogoutExpiredSessions();
+        });
+        dynamicTimer.start();
+    }
 
-        try (FileReader reader = new FileReader(filepath)) {
+    /**
+     * Updates the remaining time of active sessions in the JTable.
+     */
+    private void updateRemainingTime() {
+        DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
+
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            String remainingTimeStr = (String) tableModel.getValueAt(i, 2);
+
+            try {
+                LocalTime remainingTime = LocalTime.parse(remainingTimeStr).minusSeconds(1);
+
+                if (remainingTime.isBefore(LocalTime.of(0, 0, 0))) {
+                    tableModel.setValueAt("00:00:00", i, 2);
+                } else {
+                    tableModel.setValueAt(remainingTime.toString(), i, 2);
+                }
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error updating remaining time for row {0}: {1}", new Object[]{i, e.getMessage()});
+            }
+        }
+    }
+
+    /**
+     * Checks for expired sessions and removes them.
+     */
+    private void checkAndLogoutExpiredSessions() {
+        DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
+
+        for (int i = tableModel.getRowCount() - 1; i >= 0; i--) {
+            String remainingTimeStr = (String) tableModel.getValueAt(i, 2);
+
+            if ("00:00:00".equals(remainingTimeStr)) {
+                Integer pcNo = (Integer) tableModel.getValueAt(i, 0);
+                removeSessionFromJSON(pcNo);
+                tableModel.removeRow(i);
+            }
+        }
+    }
+
+    /**
+     * Removes a session from the JSON file by PC number.
+     */
+    private void removeSessionFromJSON(Integer pcNo) {
+        try (FileReader reader = new FileReader(FILE_PATH)) {
             JSONParser parser = new JSONParser();
             JSONObject jsonObject = (JSONObject) parser.parse(reader);
             JSONArray sessions = (JSONArray) jsonObject.get("sessions");
-            JSONObject dailyRevenue = (JSONObject) jsonObject.getOrDefault("dailyRevenue", new JSONObject());
 
-            if (sessions != null) {
-                totalUsers = sessions.size();
+            sessions.removeIf(obj -> {
+                JSONObject session = (JSONObject) obj;
+                return getInteger(session, "pcNo").equals(pcNo);
+            });
 
-                for (Object obj : sessions) {
-                    JSONObject session = (JSONObject) obj;
+            try (FileWriter writer = new FileWriter(FILE_PATH)) {
+                writer.write(jsonObject.toJSONString());
+            }
+        } catch (IOException | ParseException e) {
+            LOGGER.log(Level.SEVERE, "Error removing session for PC No {0}: {1}", new Object[]{pcNo, e.getMessage()});
+        }
+    }
 
-                    Boolean isActive = (Boolean) session.get("active");
-                    if (isActive != null && isActive) {
-                        activeSessions++;
-                    }
+    /**
+     * Processes a top-up for a user.
+     */
+    private void processTopUp() {
+        String username = usnTop.getText();
+        String amountText = amtTop.getText();
 
-                    try {
-                        Double amount = session.get("amount") != null ? Double.valueOf(session.get("amount").toString()) : 0.0;
-                        totalRevenue += amount;
-                    } catch (NumberFormatException e) {
-                        System.err.println("Invalid revenue format for session: " + session);
-                    }
+        if (username.isEmpty() || amountText.isEmpty()) {
+            showError("Please fill in all fields.");
+            return;
+        }
+
+        try {
+            double amount = Double.parseDouble(amountText);
+            int totalSeconds = (int) ((amount / RATE_PER_HOUR) * 3600);
+            String timeEquivalent = formatTime(totalSeconds);
+
+            timeTop.setText(timeEquivalent);
+
+            updateSession(username, amount, timeEquivalent);
+        } catch (NumberFormatException e) {
+            showError("Invalid amount entered.");
+        }
+    }
+
+    /**
+     * Updates a user's session in the JSON file and JTable.
+     */
+    private void updateSession(String username, double amount, String timeEquivalent) {
+        try (FileReader reader = new FileReader(FILE_PATH)) {
+            JSONParser parser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) parser.parse(reader);
+            JSONArray sessions = (JSONArray) jsonObject.get("sessions");
+
+            for (Object obj : sessions) {
+                JSONObject session = (JSONObject) obj;
+
+                if (getString(session, "username", "").equals(username)) {
+                    Double currentBalance = getDouble(session, "balance", 0.0);
+                    session.put("balance", currentBalance + amount);
+
+                    String currentRemainingTime = getString(session, "remainingTime", "00:00:00");
+                    LocalTime updatedTime = LocalTime.parse(currentRemainingTime).plusSeconds(parseSeconds(timeEquivalent));
+                    session.put("remainingTime", updatedTime.toString());
+
+                    updateJTable(username, updatedTime.toString());
+                    break;
                 }
             }
 
-            Object todayRevenueObj = dailyRevenue.get(todayDate);
-            double currentDayRevenue = 0.0;
-            if (todayRevenueObj instanceof Number) {
-                currentDayRevenue = ((Number) todayRevenueObj).doubleValue();
-            }
-
-            dailyRevenue.put(todayDate, currentDayRevenue + totalRevenue);
-            jsonObject.put("dailyRevenue", dailyRevenue);
-
-            try (FileWriter writer = new FileWriter(filepath)) {
+            try (FileWriter writer = new FileWriter(FILE_PATH)) {
                 writer.write(jsonObject.toJSONString());
-                System.out.println("Statistics updated and saved successfully.");
+                JOptionPane.showMessageDialog(this, "User topped up successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (IOException | ParseException e) {
-            System.err.println("Error updating statistics: " + e.getMessage());
+            showError("Error updating session: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Updates the JTable with the new remaining time for a user.
+     */
+    private void updateJTable(String username, String updatedTime) {
+        DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
+
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            if (username.equals(tableModel.getValueAt(i, 1))) {
+                tableModel.setValueAt(updatedTime, i, 2);
+                break;
+            }
+        }
+    }
+    
+    private void updateStatistics() {
+    double totalRevenue = 0.0;
+    int totalUsers = 0;
+    int activeSessions = 0;
+
+    File file = new File(FILE_PATH);
+
+    if (!file.exists()) {
+        showError("JSON file not found at: " + FILE_PATH);
+        return;
+    }
+
+    try (FileReader reader = new FileReader(file)) {
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(reader);
+        JSONArray sessions = (JSONArray) jsonObject.get("sessions");
+        JSONArray users = (JSONArray) jsonObject.get("users"); // Users array for cross-reference
+
+        // Today's date for comparison
+        String todayDate = LocalDate.now().toString();
+
+        if (sessions != null) {
+            totalUsers = sessions.size();
+
+            for (Object sessionObj : sessions) {
+                JSONObject session = (JSONObject) sessionObj;
+
+                // Check if the session is active
+                Boolean isActive = (Boolean) session.get("active");
+                if (Boolean.TRUE.equals(isActive)) {
+                    activeSessions++;
+                }
+
+                // Get the username from the session
+                String username = (String) session.get("username");
+                if (username != null) {
+                    // Cross-check with the users array
+                    for (Object userObj : users) {
+                        JSONObject user = (JSONObject) userObj;
+
+                        if (username.equals(user.get("username"))) {
+                            // Check if the user's last login matches today's date
+                            String lastLogin = (String) user.get("lastLogin");
+                            if (lastLogin != null && lastLogin.startsWith(todayDate)) {
+                                // Add the balance from the session to total revenue
+                                Double balance = user.get("amount") != null
+                                        ? Double.valueOf(user.get("amount").toString())
+                                        : 0.0;
+                                totalRevenue += balance;
+
+                                // Debugging logs
+                                System.out.println("Username: " + username);
+                                System.out.println("Last Login: " + lastLogin);
+                                System.out.println("Balance Added: " + balance);
+                            }
+                            break; // Move to the next session after finding the user
+                        }
+                    }
+                }
+            }
         }
 
+        // Update the fields
         jTextField1.setText(String.format("%.2f", totalRevenue)); // Total Revenue
         jTextField2.setText(String.valueOf(activeSessions));      // Active Sessions
-        jTextField3.setText(String.valueOf(totalUsers));          // Total Sessions
-        System.out.println("Statistics updated: Total Revenue = " + totalRevenue + ", Active Sessions = " + activeSessions + ", Total Sessions = " + totalUsers);
+        jTextField3.setText(String.valueOf(totalUsers));          // Total Users
+    } catch (IOException | ParseException e) {
+        showError("Error updating statistics: " + e.getMessage());
+    }
+}
+    /**
+     * Utility methods for JSON parsing.
+     */
+    private Integer getInteger(JSONObject obj, String key) {
+        return obj.get(key) != null ? Integer.valueOf(obj.get(key).toString()) : null;
     }
 
-    private String getTodayDate() {
-        return LocalDate.now().toString();
+    private Double getDouble(JSONObject obj, String key, double defaultValue) {
+        return obj.get(key) != null ? Double.valueOf(obj.get(key).toString()) : defaultValue;
     }
+
+    private String getString(JSONObject obj, String key, String defaultValue) {
+        return obj.get(key) != null ? obj.get(key).toString() : defaultValue;
+    }
+
+    private int parseSeconds(String time) {
+        String[] parts = time.split(":");
+        return Integer.parseInt(parts[0]) * 3600 + Integer.parseInt(parts[1]) * 60 + Integer.parseInt(parts[2]);
+    }
+
+    private String formatTime(int totalSeconds) {
+        return String.format("%02d:%02d:%02d", totalSeconds / 3600, (totalSeconds % 3600) / 60, totalSeconds % 60);
+    }
+
+    private void showError(String message) {
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -259,6 +436,12 @@ public Admin() {
 
         jLabel2.setText("AMOUNT");
 
+        amtTop.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                amtTopKeyReleased(evt);
+            }
+        });
+
         jLabel6.setText("TIME");
 
         tpBtn.setText("TOP UP");
@@ -337,8 +520,38 @@ public Admin() {
     processTopUp();        // TODO add your handling code here:
     }//GEN-LAST:event_tpBtnActionPerformed
 
+    private void amtTopKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_amtTopKeyReleased
+        
+    final double RATE_PER_HOUR = 20.0; // Define the rate per hour
+
+    // Get the amount entered in the text field
+    String amountText = amtTop.getText();
+
+    // Validate the input
+    if (amountText.isEmpty()) {
+        timeTop.setText(""); // Clear the time field if no input
+        return;
+    }
+
+    try {
+        double amount = Double.parseDouble(amountText);
+
+        // Calculate time equivalent in HH:mm:ss format
+        int totalSeconds = (int) ((amount / RATE_PER_HOUR) * 3600);
+        String timeEquivalent = String.format("%02d:%02d:%02d",
+                totalSeconds / 3600, (totalSeconds % 3600) / 60, totalSeconds % 60);
+
+        // Display the calculated time in the timeTop field
+        timeTop.setText(timeEquivalent);
+    } catch (NumberFormatException e) {
+        // Handle invalid input (e.g., non-numeric characters)
+        timeTop.setText("Invalid input");
+    }
+
+    }//GEN-LAST:event_amtTopKeyReleased
+
     /**
-     * @param args the command line arguments
+     * @param  args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -372,181 +585,7 @@ public Admin() {
 
 
 
-    private void startDynamicTimer() {
-    // Create a timer that updates the remaining time every second
-    dynamicTimer = new javax.swing.Timer(1000, e -> {
-        updateRemainingTime(); // Update countdown for each active session
-    });
-    dynamicTimer.start(); // Start the timer
-}
-
-private void updateRemainingTime() {
-    DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
-
-    for (int i = 0; i < tableModel.getRowCount(); i++) {
-        String remainingTimeStr = (String) tableModel.getValueAt(i, 2); // Get remaining time
-        LOGGER.log(Level.INFO, "Processing row {0} with remaining time: {1}", new Object[]{i, remainingTimeStr});
-
-        try {
-            LocalTime remainingTime = LocalTime.parse(remainingTimeStr); // Parse time
-            LocalTime updatedTime = remainingTime.minusSeconds(1); // Subtract 1 second
-
-            if (!updatedTime.isBefore(LocalTime.of(0, 0, 0))) { // If time is still valid
-                String formattedTime = updatedTime.toString();
-                tableModel.setValueAt(formattedTime, i, 2); // Update JTable
-                LOGGER.log(Level.INFO, "Updated remaining time for row {0}: {1}", new Object[]{i, formattedTime});
-            } else {
-                tableModel.setValueAt("00:00:00", i, 2); // Set to zero if expired
-                LOGGER.log(Level.WARNING, "Session expired for row {0}", i);
-                removeSessionFromTableAndJSON(i, (Integer) tableModel.getValueAt(i, 0)); // Remove session
-            }
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Error processing remaining time for row {0}: {1}", new Object[]{i, e.getMessage()});
-        }
-    }
-}
-// Remove session from JTable and mark as inactive in JSON
-
-
-    private void startAutoLogoutCheck() {
-        // Create a timer that runs every second
-        dynamicTimer = new javax.swing.Timer(1000, e -> {
-            updateRemainingTime(); // Update countdown for each active session
-            checkAndLogoutExpiredSessions(); // Handle auto-logout for expired sessions
-        });
-        dynamicTimer.start();
-    }
-
-    private void checkAndLogoutExpiredSessions() {
-        DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
-
-        for (int i = tableModel.getRowCount() - 1; i >= 0; i--) { // Iterate in reverse to avoid index shifting
-            String remainingTimeStr = (String) tableModel.getValueAt(i, 2);
-
-            if ("00:00:00".equals(remainingTimeStr)) {
-                Integer pcNo = (Integer) tableModel.getValueAt(i, 0); // Get PC Number
-                removeSessionFromTableAndJSON(i, pcNo); // Remove session from JTable and JSON
-            }
-        }
-    }
-
-   private void removeSessionFromTableAndJSON(int rowIndex, Integer pcNo) {
-    DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
-    tableModel.removeRow(rowIndex); // Remove the row from JTable
-
-    // Update the JSON file
-    try (FileReader reader = new FileReader(filepath)) {
-        JSONParser parser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) parser.parse(reader);
-        JSONArray sessions = (JSONArray) jsonObject.get("sessions");
-
-        // Find and update the session in the JSON array
-        for (Object obj : sessions) {
-            JSONObject session = (JSONObject) obj;
-            if (session.get("pcNo") != null && session.get("pcNo").toString().equals(pcNo.toString())) {
-                session.put("active", false); // Mark as inactive
-                session.put("remainingTime", "00:00:00"); // Set remaining time to "00:00:00"
-                break;
-            }
-        }
-
-        // Write the updated JSON back to the file
-        try (FileWriter writer = new FileWriter(filepath)) {
-            writer.write(jsonObject.toJSONString());
-            LOGGER.info("Updated JSON after session expiration for PC No " + pcNo);
-        }
-    } catch (IOException | ParseException e) {
-        LOGGER.severe("Error updating JSON file for PC No " + pcNo + ": " + e.getMessage());
-    }
-}
-   
-  
-   private void processTopUp() {
-    String username = usnTop.getText(); // Username field
-    String amountText = amtTop.getText(); // Amount field
-    final double RATE_PER_HOUR = 20.0; // Rate per hour
-
-    // Validate input
-    if (username.isEmpty() || amountText.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    double amount;
-    try {
-        amount = Double.parseDouble(amountText);
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Invalid amount entered.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    // Calculate time equivalent in HH:mm:ss format
-    int totalSeconds = (int) ((amount / RATE_PER_HOUR) * 3600);
-    String timeEquivalent = String.format("%02d:%02d:%02d", totalSeconds / 3600, (totalSeconds % 3600) / 60, totalSeconds % 60);
-
-    // Display calculated time equivalent in the time text field
-    timeTop.setText(timeEquivalent);
-
-    File file = new File(filepath);
-
-    if (!file.exists()) {
-        JOptionPane.showMessageDialog(this, "JSON file not found at: " + filepath, "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    try (FileReader reader = new FileReader(file)) {
-        JSONParser parser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) parser.parse(reader);
-        JSONArray sessions = (JSONArray) jsonObject.get("sessions");
-
-        boolean userFound = false;
-
-        for (Object obj : sessions) {
-            JSONObject session = (JSONObject) obj;
-
-            if (session.get("username") != null && session.get("username").toString().equals(username)) {
-                // Update balance
-                Double currentBalance = session.get("balance") != null ? Double.valueOf(session.get("balance").toString()) : 0.0;
-                session.put("balance", currentBalance + amount);
-
-                // Update remaining time
-                String currentRemainingTime = session.get("remainingTime") != null ? session.get("remainingTime").toString() : "00:00:00";
-                LocalTime currentTime = LocalTime.parse(currentRemainingTime);
-                LocalTime incrementTime = LocalTime.parse(timeEquivalent);
-                LocalTime updatedTime = currentTime.plusHours(incrementTime.getHour())
-                        .plusMinutes(incrementTime.getMinute())
-                        .plusSeconds(incrementTime.getSecond());
-                session.put("remainingTime", updatedTime.toString());
-
-                // Update JTable
-                DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
-                for (int i = 0; i < tableModel.getRowCount(); i++) {
-                    Object usernameObj = tableModel.getValueAt(i, 1); // Column index for username
-                    if (usernameObj != null && usernameObj.toString().equals(username)) {
-                        tableModel.setValueAt(updatedTime.toString(), i, 2); // Update the "Remaining Time" column
-                        break;
-                    }
-                }
-
-                userFound = true;
-                break;
-            }
-        }
-
-        if (!userFound) {
-            JOptionPane.showMessageDialog(this, "User not found: " + username, "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Write updated JSON back to the file
-        try (FileWriter writer = new FileWriter(filepath)) {
-            writer.write(jsonObject.toJSONString());
-            JOptionPane.showMessageDialog(this, "User topped up successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-        }
-    } catch (IOException | ParseException e) {
-        JOptionPane.showMessageDialog(this, "Error processing top-up: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
-}
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField amtTop;
     private javax.swing.JDesktopPane jDesktopPane1;
@@ -572,3 +611,4 @@ private void updateRemainingTime() {
     private javax.swing.JTextField usnTop;
     // End of variables declaration//GEN-END:variables
 }
+
