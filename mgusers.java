@@ -240,7 +240,7 @@ public class mgusers extends javax.swing.JFrame {
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        AddUsBttn.setBackground(new java.awt.Color(37, 99, 235));
+        AddUsBttn.setBackground(new java.awt.Color(255, 51, 0));
         AddUsBttn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         AddUsBttn.setForeground(new java.awt.Color(255, 255, 255));
         AddUsBttn.setText("ADD USERS");
@@ -251,7 +251,7 @@ public class mgusers extends javax.swing.JFrame {
         });
         jPanel1.add(AddUsBttn, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 150, 30));
 
-        EdtBttn.setBackground(new java.awt.Color(34, 197, 94));
+        EdtBttn.setBackground(new java.awt.Color(255, 51, 0));
         EdtBttn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         EdtBttn.setForeground(new java.awt.Color(255, 255, 255));
         EdtBttn.setText("EDIT USERS");
