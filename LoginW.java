@@ -2,15 +2,20 @@
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import java.io.FileWriter;
-import java.util.Date;
-import org.json.simple.JSONObject;
-import java.text.SimpleDateFormat;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  *
@@ -20,7 +25,7 @@ public class LoginW extends javax.swing.JFrame {
 
     private static String usname, pass;
 
-    private static final String filepath = "C:\\Users\\User\\Documents\\NetBeansProjects\\NetNexus\\src\\netnexus.json";
+    private static final String filepath = "src\\netnexus.json";
     private static JSONParser jsonParser = new JSONParser();
     private static JSONObject record = new JSONObject();
     private static JSONArray users = new JSONArray();
@@ -30,6 +35,44 @@ public class LoginW extends javax.swing.JFrame {
      */
     public LoginW() {
         initComponents();
+        new Timer(40, new ActionListener() {
+            float hue = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Interpolate red ↔ blue using sine wave
+                float ratio = (float) ((Math.sin(hue) + 1) / 2); // 0 to 1
+                int r = (int) (255 * ratio);
+                int g = 0;
+                int b = (int) (255 * (1 - ratio));
+                Color animatedColor = new Color(r, g, b);
+
+                jLabel4.setForeground(animatedColor); // Logo text
+                loginBtn.setBackground(animatedColor); // Button background
+                loginBtn.setForeground(Color.WHITE); // Always white text
+
+                hue += 0.05;
+            }
+        }).start();
+
+        jPanel2.setOpaque(true); // Allow background color to render
+        jPanel2.setBackground(new Color(15, 23, 42, 180)); // Semi-transparent navy
+        jPanel2.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1)); // Clean white border
+        jPanel2.setForeground(Color.WHITE); // Optional: set text color if needed
+
+        //Setup the animated wave background
+        AnimatedWavePanel wavePanel = new AnimatedWavePanel();
+        wavePanel.setLayout(null); // Absolute positioning for login box
+
+        // Place the login form on top of the waves
+        jPanel2.setBounds(320, 100, 340, 360);
+        wavePanel.add(jPanel2);
+
+        //Set the wave panel as the main view
+        setContentPane(wavePanel);
+        setSize(1000, 600);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     /**
@@ -42,86 +85,225 @@ public class LoginW extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         nameTF = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         passPF = new javax.swing.JPasswordField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         loginBtn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setForeground(new java.awt.Color(51, 51, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Palatino Linotype", 1, 36)); // NOI18N
-        jLabel1.setText("LOGIN");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Username:");
-
+        nameTF.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        nameTF.setForeground(new java.awt.Color(0, 0, 204));
         nameTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nameTFActionPerformed(evt);
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel3.setText("Password:");
+        passPF.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        passPF.setForeground(new java.awt.Color(255, 0, 0));
 
-        loginBtn.setText("Login");
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("PASSWORD");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("USERNAME");
+
+        loginBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        loginBtn.setForeground(new java.awt.Color(255, 255, 255));
+        loginBtn.setText("LOGIN");
         loginBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginBtnActionPerformed(evt);
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("LOGIN");
+
+        jLabel4.setFont(new java.awt.Font("SansSerif", 1, 36)); // NOI18N
+        jLabel4.setText("NETNEXUS");
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("INTERNET CAFE SOFTWARE");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addComponent(passPF, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nameTF, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addComponent(jLabel4))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(94, 94, 94)
+                        .addComponent(jLabel5)))
+                .addGap(0, 44, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(121, 121, 121))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(131, 131, 131)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addGap(26, 26, 26)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(nameTF, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(passPF, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(64, 64, 64))
+        );
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 340, 370));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(387, 387, 387)
-                                .addComponent(jLabel1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(330, 330, 330)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(nameTF)
-                                    .addComponent(passPF, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE))))
-                        .addGap(0, 398, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(424, 424, 424)
-                        .addComponent(loginBtn)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 865, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(93, 93, 93)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nameTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(passPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addComponent(loginBtn)
-                .addContainerGap(167, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    class AnimatedWavePanel extends JPanel implements ActionListener {
+
+        private final Timer timer;
+        private double phase = 0;
+        private final int trailLength = 6;
+        private final java.util.List<WaveTrail> trails = new ArrayList<>();
+
+        public AnimatedWavePanel() {
+            setBackground(Color.BLACK);
+            timer = new Timer(40, this); // slower update interval
+            timer.start();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D) g.create();
+            int width = getWidth();
+            int height = getHeight();
+
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // Fade trail
+            float alpha = 0.1f;
+            for (WaveTrail trail : trails) {
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+                trail.draw(g2, width, height);
+                alpha += 0.15f;
+            }
+
+            // Draw current wave
+            WaveTrail current = new WaveTrail(phase);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            current.draw(g2, width, height);
+            trails.add(current);
+
+            if (trails.size() > trailLength) {
+                trails.remove(0);
+            }
+
+            g2.dispose();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            phase += 0.05; // slower motion
+            repaint();
+        }
+
+        class WaveTrail {
+
+            double phase;
+
+            WaveTrail(double phase) {
+                this.phase = phase;
+            }
+
+            void draw(Graphics2D g2, int width, int height) {
+                drawJaggedWave(g2, width, height, 100, 0.012, phase,
+                        new Color(0, 255, 255), new Color(0, 255, 136)); // Aqua → Mint
+
+                drawJaggedWave(g2, width, height, 70, 0.016, phase + Math.PI / 2,
+                        new Color(255, 0, 255), new Color(255, 255, 0)); // Hot Pink → Yellow
+
+                drawJaggedWave(g2, width, height, 50, 0.02, phase + Math.PI,
+                        new Color(255, 127, 80), new Color(30, 144, 255)); // Coral → Dodger Blue
+            }
+
+            void drawJaggedWave(Graphics2D g2, int width, int height, int amplitude, double frequency, double phase, Color startColor, Color endColor) {
+                for (int x = 0; x < width - 1; x++) {
+                    // Increase spikiness with higher harmonics
+                    double waveY1 = Math.sin(frequency * x + phase)
+                            + 0.8 * Math.sin(frequency * 3 * x + phase)
+                            + 0.3 * Math.sin(frequency * 7 * x + phase);
+                    double waveY2 = Math.sin(frequency * (x + 1) + phase)
+                            + 0.8 * Math.sin(frequency * 3 * (x + 1) + phase)
+                            + 0.3 * Math.sin(frequency * 7 * (x + 1) + phase);
+
+                    double y1 = height / 2.0 + amplitude * waveY1;
+                    double y2 = height / 2.0 + amplitude * waveY2;
+
+                    // Gradient interpolation
+                    float ratio = (float) x / width;
+                    int r = (int) (startColor.getRed() * (1 - ratio) + endColor.getRed() * ratio);
+                    int g = (int) (startColor.getGreen() * (1 - ratio) + endColor.getGreen() * ratio);
+                    int b = (int) (startColor.getBlue() * (1 - ratio) + endColor.getBlue() * ratio);
+
+                    g2.setColor(new Color(r, g, b, 200));
+                    g2.drawLine(x, (int) y1, x + 1, (int) y2);
+                }
+            }
+        }
+    }
 
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         String usernameInput = nameTF.getText().trim(); // Get username input
@@ -310,7 +492,10 @@ public class LoginW extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JButton loginBtn;
     private javax.swing.JTextField nameTF;
     private javax.swing.JPasswordField passPF;
