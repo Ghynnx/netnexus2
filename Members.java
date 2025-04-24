@@ -292,6 +292,11 @@ public class Members extends javax.swing.JFrame {
         jButton2.setText("LOGOUT");
         jButton2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
         jButton2.setBorderPainted(false);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Valo (5).jpg"))); // NOI18N
 
@@ -463,6 +468,7 @@ public class Members extends javax.swing.JFrame {
     }//GEN-LAST:event_usnTfFocusLost
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.dispose();
         new LoginW().setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
     private void setupUI() {

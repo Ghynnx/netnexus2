@@ -1256,7 +1256,8 @@ public class mgusers extends javax.swing.JFrame {
     }//GEN-LAST:event_userBtnActionPerformed
 
     private void backbtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbtn1ActionPerformed
-
+        this.dispose();
+        new Admin().setVisible(true);
     }//GEN-LAST:event_backbtn1ActionPerformed
 
     /**
