@@ -16,9 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
 /**
  *
@@ -28,7 +26,7 @@ public class LoginW extends javax.swing.JFrame {
 
     private static String usname, pass;
 
-    private static final String filepath = "C:\\Users\\User\\Documents\\NetBeansProjects\\NetNexus\\src\\netnexus.json";
+    private static final String filepath = "src\\netnexus.json";
     private static JSONParser jsonParser = new JSONParser();
     private static JSONObject record = new JSONObject();
     private static JSONArray users = new JSONArray();
@@ -37,30 +35,23 @@ public class LoginW extends javax.swing.JFrame {
      * Creates new form LoginW
      */
     public LoginW() {
-        initComponents(); // sets up jPanel2 for the login form
-        initComponents(); // creates jPanel2 (login form)
+        initComponents();
 
-        BouncingTextPanel animatedBackground = new BouncingTextPanel();
-        animatedBackground.setLayout(null);
+        jPanel2.setOpaque(true); // Allow background color to render
+        jPanel2.setBackground(new Color(15, 23, 42, 180)); // Semi-transparent navy
+        jPanel2.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1)); // Clean white border
+        jPanel2.setForeground(Color.WHITE); // Optional: set text color if needed
 
-        jPanel2.setBounds(320, 100, 340, 360); // manually position login form
-        animatedBackground.add(jPanel2);
+        //Setup the animated wave background
+        AnimatedWavePanel wavePanel = new AnimatedWavePanel();
+        wavePanel.setLayout(null); // Absolute positioning for login box
 
-        // Add listener to spawn NetNexus texts on key press
-        nameTF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                animatedBackground.addNewText();
-            }
-        });
+        // Place the login form on top of the waves
+        jPanel2.setBounds(320, 100, 340, 360);
+        wavePanel.add(jPanel2);
 
-        passPF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                animatedBackground.addNewText();
-            }
-        });
-
-        // Final UI setup
-        setContentPane(animatedBackground);
+        //Set the wave panel as the main view
+        setContentPane(wavePanel);
         setSize(1000, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -167,98 +158,96 @@ public class LoginW extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    class BouncingTextPanel extends JPanel implements ActionListener, MouseMotionListener {
+    class AnimatedWavePanel extends JPanel implements ActionListener {
 
-        private final java.util.List<TextObject> texts = new java.util.ArrayList<>();
-        private Timer timer;
-        private Point mousePoint = null;
-        private final Font font = new Font("Arial", Font.BOLD, 32);
+        private final Timer timer;
+        private double phase = 0;
+        private final int trailLength = 6;
+        private final java.util.List<WaveTrail> trails = new ArrayList<>();
 
-        public BouncingTextPanel() {
-            setOpaque(true);
-            setBackground(new Color(15, 23, 42));
-            timer = new Timer(20, this);
+        public AnimatedWavePanel() {
+            setBackground(Color.BLACK);
+            timer = new Timer(40, this); // slower update interval
             timer.start();
-            addMouseMotionListener(this);
-
-            // Start with one bouncing "NetNexus"
-            addNewText();
-        }
-
-        public void addNewText() {
-            texts.add(new TextObject("NetNexus"));
         }
 
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            Graphics2D g2d = (Graphics2D) g;
+            Graphics2D g2 = (Graphics2D) g.create();
+            int width = getWidth();
+            int height = getHeight();
 
-            for (TextObject t : texts) {
-                t.update(getWidth(), getHeight());
-                t.draw(g2d, font);
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // Fade trail
+            float alpha = 0.1f;
+            for (WaveTrail trail : trails) {
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+                trail.draw(g2, width, height);
+                alpha += 0.15f;
             }
 
-            if (mousePoint != null) {
-                g2d.setColor(Color.YELLOW);
-                g2d.setFont(font);
-                g2d.drawString("NetNexus", mousePoint.x - 50, mousePoint.y - 10);
+            // Draw current wave
+            WaveTrail current = new WaveTrail(phase);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            current.draw(g2, width, height);
+            trails.add(current);
+
+            if (trails.size() > trailLength) {
+                trails.remove(0);
             }
+
+            g2.dispose();
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            phase += 0.05; // slower motion
             repaint();
         }
 
-        @Override
-        public void mouseMoved(MouseEvent e) {
-            mousePoint = e.getPoint();
-        }
+        class WaveTrail {
 
-        @Override
-        public void mouseDragged(MouseEvent e) {
-            mousePoint = e.getPoint();
-        }
+            double phase;
 
-        class TextObject {
-
-            int x, y, dx, dy;
-            Color color;
-            final String text;
-
-            public TextObject(String text) {
-                this.text = text;
-                Random r = new Random();
-                x = r.nextInt(600);
-                y = r.nextInt(400);
-                dx = r.nextInt(3) + 2;
-                dy = r.nextInt(3) + 2;
-                color = getRandomColor();
+            WaveTrail(double phase) {
+                this.phase = phase;
             }
 
-            void update(int w, int h) {
-                if (x <= 0 || x + 100 > w) {
-                    dx *= -1;
-                    color = getRandomColor();
+            void draw(Graphics2D g2, int width, int height) {
+                drawJaggedWave(g2, width, height, 100, 0.012, phase,
+                        new Color(0, 255, 255), new Color(0, 255, 136)); // Aqua → Mint
+
+                drawJaggedWave(g2, width, height, 70, 0.016, phase + Math.PI / 2,
+                        new Color(255, 0, 255), new Color(255, 255, 0)); // Hot Pink → Yellow
+
+                drawJaggedWave(g2, width, height, 50, 0.02, phase + Math.PI,
+                        new Color(255, 127, 80), new Color(30, 144, 255)); // Coral → Dodger Blue
+            }
+
+            void drawJaggedWave(Graphics2D g2, int width, int height, int amplitude, double frequency, double phase, Color startColor, Color endColor) {
+                for (int x = 0; x < width - 1; x++) {
+                    // Increase spikiness with higher harmonics
+                    double waveY1 = Math.sin(frequency * x + phase)
+                            + 0.8 * Math.sin(frequency * 3 * x + phase)
+                            + 0.3 * Math.sin(frequency * 7 * x + phase);
+                    double waveY2 = Math.sin(frequency * (x + 1) + phase)
+                            + 0.8 * Math.sin(frequency * 3 * (x + 1) + phase)
+                            + 0.3 * Math.sin(frequency * 7 * (x + 1) + phase);
+
+                    double y1 = height / 2.0 + amplitude * waveY1;
+                    double y2 = height / 2.0 + amplitude * waveY2;
+
+                    // Gradient interpolation
+                    float ratio = (float) x / width;
+                    int r = (int) (startColor.getRed() * (1 - ratio) + endColor.getRed() * ratio);
+                    int g = (int) (startColor.getGreen() * (1 - ratio) + endColor.getGreen() * ratio);
+                    int b = (int) (startColor.getBlue() * (1 - ratio) + endColor.getBlue() * ratio);
+
+                    g2.setColor(new Color(r, g, b, 200));
+                    g2.drawLine(x, (int) y1, x + 1, (int) y2);
                 }
-                if (y <= 30 || y + 30 > h) {
-                    dy *= -1;
-                    color = getRandomColor();
-                }
-                x += dx;
-                y += dy;
-            }
-
-            void draw(Graphics2D g, Font font) {
-                g.setFont(font);
-                g.setColor(color);
-                g.drawString(text, x, y);
-            }
-
-            private Color getRandomColor() {
-                Random r = new Random();
-                return new Color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
             }
         }
     }
