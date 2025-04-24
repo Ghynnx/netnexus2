@@ -19,43 +19,16 @@ import org.json.simple.parser.ParseException;
 public class Members extends javax.swing.JFrame {
 
     private static final String FILE_PATH = "src\\netnexus.json";
-    
+    private final String loggedInUsername; // Holds the logged-in user's username.
 
-    public Members() {
-        initComponents();
-        setupUI();
+    public Members(String username) {
+    this.loggedInUsername = username; // Store the logged-in username
+    initComponents();
+    setupUI();
+    populateUserDetails(loggedInUsername); // Automatically fetch and display details
+}
+        // Automatically populate user details using the logged-in username.
 
-    }
-
-    private void setupUI() {
-        logsTf.setEditable(false);
-        dsctTf.setEditable(false);
-        rankTf.setEditable(false);
-
-        usnTf.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                handleUserFocusLost();
-            }
-        });
-    }
-
-    private synchronized JSONObject readJSONFile() throws IOException, ParseException {
-        File file = new File(FILE_PATH);
-        if (!file.exists()) {
-            throw new IOException("JSON file not found at: " + FILE_PATH);
-        }
-        String content = new String(Files.readAllBytes(Paths.get(FILE_PATH)));
-        JSONParser parser = new JSONParser();
-        return (JSONObject) parser.parse(content);
-    }
-
-    // Helper to write JSON file
-    private synchronized void writeJSONFile(JSONObject jsonObject) throws IOException {
-        try (FileWriter writer = new FileWriter(FILE_PATH)) {
-            writer.write(jsonObject.toJSONString());
-        }
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -67,255 +40,84 @@ public class Members extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jButton2 = new javax.swing.JButton();
-        LogsLbl = new javax.swing.JLabel();
-        RnkLbl = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        usnTf = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         rankTf = new javax.swing.JTextField();
         amtTf = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         timeTf = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        dsctTf = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         logsTf = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        dsctTf = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        usnTf = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(24, 26, 32));
+        jLabel1.setText("user");
 
-        jPanel2.setBackground(new java.awt.Color(33, 35, 44));
+        jLabel2.setText("amount");
 
-        jButton2.setBackground(new java.awt.Color(255, 0, 0));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("LOGOUT");
+        jLabel3.setText("rank");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(LogsLbl)
-                .addGap(136, 136, 136)
-                .addComponent(RnkLbl)
-                .addContainerGap(19, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(56, 56, 56))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jButton2)
-                .addGap(27, 27, 27)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(160, 160, 160)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(LogsLbl)
-                    .addComponent(RnkLbl))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel3.setBackground(new java.awt.Color(31, 33, 41));
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("USER");
-
-        usnTf.setBackground(new java.awt.Color(24, 26, 32));
-        usnTf.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                usnTfFocusLost(evt);
-            }
-        });
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("RANK");
-
-        rankTf.setBackground(new java.awt.Color(24, 26, 32));
         rankTf.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 rankTfKeyReleased(evt);
             }
         });
 
-        amtTf.setBackground(new java.awt.Color(24, 26, 32));
         amtTf.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 amtTfKeyReleased(evt);
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("AMOUNT");
+        jLabel4.setText("Time");
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(usnTf, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rankTf, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(amtTf, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addContainerGap(44, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(usnTf, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rankTf, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(amtTf, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
-        );
-
-        jPanel4.setBackground(new java.awt.Color(31, 33, 41));
-
-        jButton1.setBackground(new java.awt.Color(255, 51, 0));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("TOP UP");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addContainerGap())
-        );
-
-        jPanel5.setBackground(new java.awt.Color(33, 35, 44));
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("TIME");
-
-        timeTf.setBackground(new java.awt.Color(24, 26, 32));
         timeTf.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 timeTfKeyReleased(evt);
             }
         });
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("DISCOUNT");
+        jLabel5.setText("Logins");
 
-        dsctTf.setBackground(new java.awt.Color(24, 26, 32));
-        dsctTf.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                dsctTfKeyReleased(evt);
-            }
-        });
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("LOGINS");
-
-        logsTf.setBackground(new java.awt.Color(24, 26, 32));
         logsTf.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 logsTfKeyReleased(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(49, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(logsTf, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(dsctTf, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(timeTf)))
-                .addGap(47, 47, 47))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(timeTf, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dsctTf, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(logsTf, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
-        );
+        jLabel6.setText("Discount");
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Users.png"))); // NOI18N
-        jLabel7.setText("USER DASHBORD");
+        dsctTf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                dsctTfKeyReleased(evt);
+            }
+        });
 
-        jLabel8.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 51, 255));
-        jLabel8.setText("NET");
+        jButton1.setText("topUp");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
-        jLabel9.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel9.setText("NEXUS");
+        usnTf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                usnTfFocusLost(evt);
+            }
+        });
 
-        jLabel10.setFont(new java.awt.Font("SansSerif", 1, 8)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("INTERNET CAFE SOFTWARE");
+        jButton2.setText("Logout");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -324,44 +126,65 @@ public class Members extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(69, 69, 69)
+                        .addGap(107, 107, 107)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel7)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel9)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(amtTf, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                            .addComponent(usnTf)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(81, 81, 81)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(rankTf)
+                            .addComponent(timeTf, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE))
+                        .addGap(49, 49, 49))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(logsTf)
+                        .addComponent(dsctTf, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(191, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel10)
-                .addGap(34, 34, 34)
-                .addComponent(jLabel7)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(154, 154, 154)
+                        .addComponent(jLabel1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(54, Short.MAX_VALUE))
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(rankTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(logsTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(usnTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel6))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(amtTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(timeTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dsctTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(60, 60, 60)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addContainerGap(163, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -415,7 +238,7 @@ public class Members extends javax.swing.JFrame {
     }//GEN-LAST:event_TimeTFActionPerformed
 
     private void amtTfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_amtTfKeyReleased
-        // TODO add your handling code here:
+     // TODO add your handling code here:
     }//GEN-LAST:event_amtTfKeyReleased
 
     private void rankTfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rankTfKeyReleased
@@ -441,8 +264,70 @@ public class Members extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void usnTfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_usnTfFocusLost
-        handleUserFocusLost();
+
     }//GEN-LAST:event_usnTfFocusLost
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+      new LoginW().setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+  private void setupUI() {
+        logsTf.setEditable(false);
+        dsctTf.setEditable(false);
+        rankTf.setEditable(false);
+        usnTf.setEditable(false); // Disable manual editing for the username field.
+    }
+
+    private synchronized JSONObject readJSONFile() throws IOException, ParseException {
+        File file = new File(FILE_PATH);
+        if (!file.exists()) {
+            throw new IOException("JSON file not found at: " + FILE_PATH);
+        }
+        String content = new String(Files.readAllBytes(Paths.get(FILE_PATH)));
+        JSONParser parser = new JSONParser();
+        return (JSONObject) parser.parse(content);
+    }
+
+    private synchronized void writeJSONFile(JSONObject jsonObject) throws IOException {
+        try (FileWriter writer = new FileWriter(FILE_PATH)) {
+            writer.write(jsonObject.toJSONString());
+        }
+    }
+
+    // Populate user details using the provided username.
+    private void populateUserDetails(String username) {
+        try {
+            JSONObject jsonObject = readJSONFile();
+            JSONArray users = (JSONArray) jsonObject.get("users");
+
+            if (users != null) {
+                for (Object obj : users) {
+                    JSONObject user = (JSONObject) obj;
+                    String storedUsername = (String) user.get("username");
+
+                    if (storedUsername != null && storedUsername.equalsIgnoreCase(username)) {
+                        long logins = user.get("logins") != null ? (long) user.get("logins") : 0;
+                        long discount = user.get("discount") != null ? (long) user.get("discount") : 0;
+                        String userTime = user.get("userTime") != null ? (String) user.get("userTime") : "N/A";
+                        double amount = user.get("amount") != null ? Double.parseDouble(user.get("amount").toString()) : 0.0;
+
+                        // Populate the fields.
+                        usnTf.setText(storedUsername);
+                        logsTf.setText(String.valueOf(logins));
+                        dsctTf.setText(String.valueOf(discount));
+                        timeTf.setText(userTime);
+                        amtTf.setText(String.format("%.2f", amount));
+                        rankTf.setText(determineRank((int) logins));
+                        return;
+                    }
+                }
+            }
+            JOptionPane.showMessageDialog(this, "User details not found.");
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(Members.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error reading user details.");
+        }
+    }
+
     private String determineRank(int logins) {
         if (logins >= 30) {
             return "Gold";
@@ -455,152 +340,69 @@ public class Members extends javax.swing.JFrame {
         }
     }
 
-    // Calculate discount based on logins
-    private int calculateDiscount(int logins) {
-        if (logins >= 30) {
-            return 15;
-        } else if (logins >= 20) {
-            return 10;
-        } else if (logins >= 10) {
-            return 5;
-        } else {
-            return 0;
-        }
-    }
-
-    // Handle user text field focus lost
-    private void handleUserFocusLost() {
-        String enteredUsername = usnTf.getText().trim();
-        if (enteredUsername.isEmpty()) {
-            return;
-        }
-
-        try {
-            JSONObject jsonObject = readJSONFile();
-            JSONArray users = (JSONArray) jsonObject.get("users");
-
-            if (users != null) {
-                for (Object obj : users) {
-                    JSONObject user = (JSONObject) obj;
-                    String username = (String) user.get("username");
-
-                    if (username != null && username.equalsIgnoreCase(enteredUsername)) {
-                        long logins = user.get("logins") != null ? (long) user.get("logins") : 0;
-                        long discount = user.get("discount") != null ? (long) user.get("discount") : 0;
-                        String userTime = user.get("userTime") != null ? (String) user.get("userTime") : "N/A";
-
-                        logsTf.setText(String.valueOf(logins));
-                        dsctTf.setText(String.valueOf(discount));
-                        timeTf.setText(userTime);
-                        rankTf.setText(determineRank((int) logins));
-                        return;
-                    }
-                }
-            }
-            JOptionPane.showMessageDialog(this, "User not found.");
-        } catch (IOException | ParseException ex) {
-            Logger.getLogger(Members.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error reading JSON file.");
-        }
-    }
-
-    // Handle the "Top Up" button press
+    // Handle the "Top Up" button press.
     private void handleTopUp() {
-        String enteredUsername = usnTf.getText().trim();
+        if (loggedInUsername == null || loggedInUsername.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No logged-in user.");
+            return;
+        }
+
         String amountStr = amtTf.getText().trim();
-
-        if (enteredUsername.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a username.");
-            return;
-        }
-
-        double amount;
-        try {
-            amount = Double.parseDouble(amountStr); // Allow decimals for balance
-            if (amount <= 0) {
-                throw new NumberFormatException("Amount must be greater than 0.");
-            }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Invalid amount entered.");
+        if (amountStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter an amount.");
             return;
         }
 
         try {
-            JSONObject jsonObject = readJSONFile();
-            JSONArray users = (JSONArray) jsonObject.get("users");
+            double amount = Double.parseDouble(amountStr);
+            if (amount <= 0) throw new NumberFormatException("Amount must be positive.");
 
-            if (users != null) {
-                for (Object obj : users) {
-                    JSONObject user = (JSONObject) obj;
-                    String username = (String) user.get("username");
+            JSONObject json = readJSONFile();
+            JSONArray users = (JSONArray) json.get("users");
 
-                    if (username != null && username.equalsIgnoreCase(enteredUsername)) {
-                        // Calculate session time based on balance
-                        String calculatedTime = calculateUserTime(amount);
+            for (Object obj : users) {
+                JSONObject user = (JSONObject) obj;
+                if (loggedInUsername.equalsIgnoreCase((String) user.get("username"))) {
+                    double balance = Double.parseDouble(user.getOrDefault("amount", "0").toString());
+                    user.put("amount", balance + amount);
 
-                        // Update the time text field
-                        timeTf.setText(calculatedTime);
-
-                        // Update user data in JSON
-                        long logins = user.get("logins") != null ? (long) user.get("logins") : 0;
-                        logins++;
-                        user.put("logins", logins);
-                        user.put("userTime", calculatedTime);
-
-                        int discount = calculateDiscount((int) logins);
-                        user.put("discount", discount);
-
-                        writeJSONFile(jsonObject);
-                        JOptionPane.showMessageDialog(this, "Top-up successful! "
-                                + "New session duration: " + calculatedTime);
-                        return;
-                    }
+                    writeJSONFile(json);
+                    JOptionPane.showMessageDialog(this, "Top-up successful!");
+                    populateUserDetails(loggedInUsername); // Refresh user details.
+                    return;
                 }
             }
+
             JOptionPane.showMessageDialog(this, "User not found.");
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid amount: " + ex.getMessage());
         } catch (IOException | ParseException ex) {
-            Logger.getLogger(Members.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error processing JSON file.");
+            JOptionPane.showMessageDialog(this, "Error processing JSON file: " + ex.getMessage());
         }
+    
     }
 
-    private String calculateUserTime(double balance) {
-        int timeInSeconds = (int) ((balance / 20) * 3600); // 1 hour per 20 balance
-        int hours = timeInSeconds / 3600;
-        int minutes = (timeInSeconds % 3600) / 60;
-        int seconds = timeInSeconds % 60;
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-    }
 
-    public static void main(String args[]) {
+   public static void main(String args[]) {
+        // Simulate passing the logged-in username to the Members screen.
+        String loggedInUsername = "exampleUser";
         java.awt.EventQueue.invokeLater(() -> {
-            new Members().setVisible(true);
+            new Members(loggedInUsername).setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel LogsLbl;
-    private javax.swing.JLabel RnkLbl;
     private javax.swing.JTextField amtTf;
     private javax.swing.JTextField dsctTf;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField logsTf;
     private javax.swing.JTextField rankTf;
     private javax.swing.JTextField timeTf;
