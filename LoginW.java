@@ -124,139 +124,142 @@ public class LoginW extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
-         String usernameInput = nameTF.getText().trim(); // Get username input
-    String passwordInput = new String(passPF.getPassword()).trim(); // Get password input
-    try {
-        handleUserLogin(usernameInput, passwordInput);
-    } catch (IOException ex) {
-        Logger.getLogger(LoginW.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        String usernameInput = nameTF.getText().trim(); // Get username input
+        String passwordInput = new String(passPF.getPassword()).trim(); // Get password input
+        try {
+            handleUserLogin(usernameInput, passwordInput);
+        } catch (IOException ex) {
+            Logger.getLogger(LoginW.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_loginBtnActionPerformed
 
     private void nameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_nameTFActionPerformed
-    
-
 
 // Validate if the username and password match
-private boolean isLoginValid(JSONObject userObject, String usernameInput, String passwordInput) {
-    String storedUsername = ((String) userObject.get("username")).toLowerCase(); // Case-insensitive username
-    String storedPassword = (String) userObject.get("password"); // Case-sensitive password
+    private boolean isLoginValid(JSONObject userObject, String usernameInput, String passwordInput) {
+        String storedUsername = ((String) userObject.get("username")).toLowerCase(); // Case-insensitive username
+        String storedPassword = (String) userObject.get("password"); // Case-sensitive password
 
-    return usernameInput.toLowerCase().equals(storedUsername) && passwordInput.equals(storedPassword);
-}
+        return usernameInput.toLowerCase().equals(storedUsername) && passwordInput.equals(storedPassword);
+    }
 
 // Check if the user is an admin
-private boolean isAdmin(String usernameInput) {
-    return "admin".equalsIgnoreCase(usernameInput);
-}
+    private boolean isAdmin(String usernameInput) {
+        return "admin".equalsIgnoreCase(usernameInput);
+    }
 
 // Process login for regular users
-private boolean processRegularUserLogin(JSONObject userObject) {
-    long balance = getBalance(userObject);
+// Process login for regular users or exempt admin from balance check
+    // Process login for regular users or exempt admin from balance check
+    private boolean processRegularUserLogin(JSONObject userObject, String usernameInput) {
+        if (isAdmin(usernameInput)) {
+            // Admins are exempt from balance checks
+            return true;
+        }
 
-    if (balance <= 0) {
-        JOptionPane.showMessageDialog(this, "Login failed: Your balance is zero. Please top up your account.", "Login Failed", JOptionPane.ERROR_MESSAGE);
-        return false; // Stop login process if balance is insufficient
+        long balance = getBalance(userObject);
+
+        if (balance <= 0) {
+            JOptionPane.showMessageDialog(this, "Login failed: Your balance is zero. Please top up your account.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            return false; // Stop login process if balance is insufficient
+        }
+
+        // Increment login count
+        long logins = (long) userObject.getOrDefault("logins", 0L);
+        userObject.put("logins", logins + 1);
+
+        // Update session start time
+        updateSessionStartTime(userObject);
+
+        return true;
     }
-
-    // Increment login count
-    long logins = (long) userObject.getOrDefault("logins", 0L);
-    userObject.put("logins", logins + 1);
-
-    // Update session start time
-    updateSessionStartTime(userObject);
-
-    return true;
-}
 
 // Safely retrieve and convert balance to long
-private long getBalance(JSONObject userObject) {
-    Object balanceObj = userObject.getOrDefault("amount", 0L);
+    private long getBalance(JSONObject userObject) {
+        Object balanceObj = userObject.getOrDefault("amount", 0L);
 
-    if (balanceObj instanceof String) {
-        return Long.parseLong((String) balanceObj); // Convert String to Long
-    } else if (balanceObj instanceof Number) {
-        return ((Number) balanceObj).longValue(); // Handle numeric types directly
+        if (balanceObj instanceof String) {
+            return Long.parseLong((String) balanceObj); // Convert String to Long
+        } else if (balanceObj instanceof Number) {
+            return ((Number) balanceObj).longValue(); // Handle numeric types directly
+        }
+        return 0L; // Default to 0 if the type is unexpected
     }
-    return 0L; // Default to 0 if the type is unexpected
-}
 
 // Update the session start time for regular users
-private void updateSessionStartTime(JSONObject userObject) {
-    String currentTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date());
-    userObject.put("startTime", currentTime); // Update start time with the current time
-}
+    private void updateSessionStartTime(JSONObject userObject) {
+        String currentTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date());
+        userObject.put("startTime", currentTime); // Update start time with the current time
+    }
 
 // Redirect the admin to the Admin.java screen
-private void redirectToAdmin() {
-    dispose(); // Close the login window
-    Admin adminScreen = new Admin();
-    adminScreen.setVisible(true);
-}
+    private void redirectToAdmin() {
+        dispose(); // Close the login window
+        Admin adminScreen = new Admin();
+        adminScreen.setVisible(true);
+    }
 
 // Inside LoginW.java
-private void redirectToMembers(String username) {
-    dispose(); // Close the login window
-    Members memberScreen = new Members(username); // Pass the logged-in username to Members
-    memberScreen.setVisible(true);
-}
+    private void redirectToMembers(String username) {
+        dispose(); // Close the login window
+        Members memberScreen = new Members(username); // Pass the logged-in username to Members
+        memberScreen.setVisible(true);
+    }
 
 // Update the method call in the main login logic
-private void handleUserLogin(String usernameInput, String passwordInput) throws IOException {
-    try {
-        filecheck(); // Verify file existence and parse user data
-    } catch (FileNotFoundException ex) {
-        JOptionPane.showMessageDialog(this, "User database file not found.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    } catch (org.json.simple.parser.ParseException ex) {
-        JOptionPane.showMessageDialog(this, "Error parsing user database file.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+    private void handleUserLogin(String usernameInput, String passwordInput) throws IOException {
+        try {
+            filecheck(); // Verify file existence and parse user data
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "User database file not found.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        } catch (org.json.simple.parser.ParseException ex) {
+            JOptionPane.showMessageDialog(this, "Error parsing user database file.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    boolean isUserFound = false;
+        boolean isUserFound = false;
 
-    for (int i = 0; i < users.size(); i++) {
-        JSONObject userObject = (JSONObject) users.get(i);
+        for (int i = 0; i < users.size(); i++) {
+            JSONObject userObject = (JSONObject) users.get(i);
 
-        // Validate if the username and password match
-        if (isLoginValid(userObject, usernameInput, passwordInput)) {
-            isUserFound = true;
+            // Validate if the username and password match
+            if (isLoginValid(userObject, usernameInput, passwordInput)) {
+                isUserFound = true;
 
-            if (isAdmin(usernameInput)) {
-                // Redirect admin to Admin.java without updating session time
-                redirectToAdmin();
-                return;
+                if (isAdmin(usernameInput)) {
+                    // Redirect admin to Admin.java without updating session time
+                    redirectToAdmin();
+                    return;
+                }
+
+                // Check user balance and handle session update
+                if (!processRegularUserLogin(userObject, usernameInput)) {
+                    return; // Stop processing if balance is insufficient
+                }
+                // Redirect to Members.java with the logged-in username
+                redirectToMembers(usernameInput);
+                break;
             }
+        }
 
-            // Check user balance and handle session update
-            if (!processRegularUserLogin(userObject)) {
-                return; // Stop processing if balance is insufficient
-            }
+        if (!isUserFound) {
+            JOptionPane.showMessageDialog(this, "No account has been found.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+        }
 
-            // Redirect to Members.java with the logged-in username
-            redirectToMembers(usernameInput);
-            break;
+        try {
+            save(); // Save updated user data back to file
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error saving user data.", "Error", JOptionPane.ERROR_MESSAGE);
+            throw ex;
         }
     }
-
-    if (!isUserFound) {
-        JOptionPane.showMessageDialog(this, "No account has been found.", "Login Failed", JOptionPane.ERROR_MESSAGE);
-    }
-
-    try {
-        save(); // Save updated user data back to file
-    } catch (IOException ex) {
-        JOptionPane.showMessageDialog(this, "Error saving user data.", "Error", JOptionPane.ERROR_MESSAGE);
-        throw ex;
-    }
-}
 
     public static String getusname() {
         return usname;
     }
-
 
     /**
      * @param args the command line arguments
@@ -287,21 +290,22 @@ private void handleUserLogin(String usernameInput, String passwordInput) throws 
         });
     }
 
-   public static void filecheck() throws FileNotFoundException, IOException, org.json.simple.parser.ParseException {
-    try (FileReader reader = new FileReader(filepath)) {
-        record = (JSONObject) jsonParser.parse(reader); // Parse the JSON file
-        users = (JSONArray) record.get("users"); // Extract the "users" array
+    public static void filecheck() throws FileNotFoundException, IOException, org.json.simple.parser.ParseException {
+        try (FileReader reader = new FileReader(filepath)) {
+            record = (JSONObject) jsonParser.parse(reader); // Parse the JSON file
+            users = (JSONArray) record.get("users"); // Extract the "users" array
+        }
     }
-}
-   public static void save() throws IOException {
-    try (FileWriter file = new FileWriter(filepath)) {
-        file.write(record.toJSONString());
-        file.flush();
-    } catch (IOException e) {
-        Logger.getLogger(LoginW.class.getName()).log(Level.SEVERE, null, e);
-        throw e;
+
+    public static void save() throws IOException {
+        try (FileWriter file = new FileWriter(filepath)) {
+            file.write(record.toJSONString());
+            file.flush();
+        } catch (IOException e) {
+            Logger.getLogger(LoginW.class.getName()).log(Level.SEVERE, null, e);
+            throw e;
+        }
     }
-}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

@@ -21,7 +21,7 @@ public class Members extends javax.swing.JFrame {
     private static final String FILE_PATH = "src\\netnexus.json";
     private final String loggedInUsername; // Holds the logged-in user's username.
 
-    public Members(String username) {
+public Members(String username) {
     this.loggedInUsername = username; // Store the logged-in username
     initComponents();
     setupUI();
@@ -299,7 +299,12 @@ public class Members extends javax.swing.JFrame {
             JSONObject jsonObject = readJSONFile();
             JSONArray users = (JSONArray) jsonObject.get("users");
 
-            if (users != null) {
+           
+    if (username == null || username.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Invalid username.");
+        return;
+    }
+    // Existing logic follows...
                 for (Object obj : users) {
                     JSONObject user = (JSONObject) obj;
                     String storedUsername = (String) user.get("username");
@@ -320,7 +325,7 @@ public class Members extends javax.swing.JFrame {
                         return;
                     }
                 }
-            }
+            
             JOptionPane.showMessageDialog(this, "User details not found.");
         } catch (IOException | ParseException ex) {
             Logger.getLogger(Members.class.getName()).log(Level.SEVERE, null, ex);
@@ -342,11 +347,10 @@ public class Members extends javax.swing.JFrame {
 
     // Handle the "Top Up" button press.
     private void handleTopUp() {
-        if (loggedInUsername == null || loggedInUsername.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No logged-in user.");
-            return;
-        }
-
+        if (loggedInUsername == null || loggedInUsername.trim().isEmpty()) {
+    JOptionPane.showMessageDialog(this, "No logged-in user.");
+    return;
+}
         String amountStr = amtTf.getText().trim();
         if (amountStr.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please enter an amount.");

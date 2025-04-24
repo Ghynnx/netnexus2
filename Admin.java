@@ -148,60 +148,61 @@ private void startAutoLogoutTimer() {
         }
     }
 
-    private void updateStatistics() {
-        System.out.println("Updating statistics...");
-        double totalRevenue = 0.0;
-        int totalUsers = 0;
-        int activeSessions = 0;
-        String todayDate = getTodayDate(); // Get today's date
+   private void updateStatistics() {
+    System.out.println("Updating statistics...");
+    double totalRevenue = 0.0;
+    int totalUsers = 0;
+    int activeSessions = 0;
+    String todayDate = getTodayDate(); // Get today's date
 
-        try (FileReader reader = new FileReader(filepath)) {
-            JSONParser parser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) parser.parse(reader);
-            JSONArray sessions = (JSONArray) jsonObject.get("sessions");
-            JSONObject dailyRevenue = (JSONObject) jsonObject.getOrDefault("dailyRevenue", new JSONObject());
+    try (FileReader reader = new FileReader(filepath)) {
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(reader);
+        JSONArray sessions = (JSONArray) jsonObject.get("sessions");
+        JSONObject dailyRevenue = (JSONObject) jsonObject.getOrDefault("dailyRevenue", new JSONObject());
 
-            if (sessions != null) {
-                totalUsers = sessions.size();
+        if (sessions != null) {
+            totalUsers = sessions.size();
 
-                for (Object obj : sessions) {
-                    JSONObject session = (JSONObject) obj;
+            for (Object obj : sessions) {
+                JSONObject session = (JSONObject) obj;
 
-                    Boolean isActive = (Boolean) session.get("active");
-                    if (isActive != null && isActive) {
-                        activeSessions++;
-                    }
+                Boolean isActive = (Boolean) session.get("active");
+                if (isActive != null && isActive) {
+                    activeSessions++;
+                }
 
-                    try {
-                        Double amount = session.get("amount") != null ? Double.valueOf(session.get("amount").toString()) : 0.0;
-                        totalRevenue += amount;
-                    } catch (NumberFormatException e) {
-                        System.err.println("Invalid revenue format for session: " + session);
-                    }
+                try {
+                    Double amount = session.get("amount") != null ? Double.valueOf(session.get("amount").toString()) : 0.0;
+                    totalRevenue += amount;
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid revenue format for session: " + session);
                 }
             }
-
-            double currentDayRevenue = dailyRevenue.getOrDefault(todayDate, 0.0) instanceof Double
-                    ? (double) dailyRevenue.get(todayDate)
-                    : 0.0;
-
-            dailyRevenue.put(todayDate, currentDayRevenue + totalRevenue);
-            jsonObject.put("dailyRevenue", dailyRevenue);
-
-            try (FileWriter writer = new FileWriter(filepath)) {
-                writer.write(jsonObject.toJSONString());
-                System.out.println("Statistics updated and saved successfully.");
-            }
-        } catch (IOException | ParseException e) {
-            System.err.println("Error updating statistics: " + e.getMessage());
         }
 
-        jTextField1.setText(String.format("%.2f", totalRevenue)); // Total Revenue
-        jTextField2.setText(String.valueOf(activeSessions));      // Active Sessions
-        jTextField3.setText(String.valueOf(totalUsers));          // Total Sessions
-        System.out.println("Statistics updated: Total Revenue = " + totalRevenue + ", Active Sessions = " + activeSessions + ", Total Sessions = " + totalUsers);
+        Object todayRevenueObj = dailyRevenue.get(todayDate);
+        double currentDayRevenue = 0.0;
+        if (todayRevenueObj instanceof Number) {
+            currentDayRevenue = ((Number) todayRevenueObj).doubleValue();
+        }
+
+        dailyRevenue.put(todayDate, currentDayRevenue + totalRevenue);
+        jsonObject.put("dailyRevenue", dailyRevenue);
+
+        try (FileWriter writer = new FileWriter(filepath)) {
+            writer.write(jsonObject.toJSONString());
+            System.out.println("Statistics updated and saved successfully.");
+        }
+    } catch (IOException | ParseException e) {
+        System.err.println("Error updating statistics: " + e.getMessage());
     }
 
+    jTextField1.setText(String.format("%.2f", totalRevenue)); // Total Revenue
+    jTextField2.setText(String.valueOf(activeSessions));      // Active Sessions
+    jTextField3.setText(String.valueOf(totalUsers));          // Total Sessions
+    System.out.println("Statistics updated: Total Revenue = " + totalRevenue + ", Active Sessions = " + activeSessions + ", Total Sessions = " + totalUsers);
+}
     private String getTodayDate() {
         return LocalDate.now().toString();
     }
