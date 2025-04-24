@@ -5,12 +5,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.util.logging.Logger;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -24,16 +26,16 @@ public class Admin extends javax.swing.JFrame {
 
     private javax.swing.Timer dynamicTimer;
     private final String filepath = "src\\netnexus.json"; // Update with your JSON file path
+       private static final Logger LOGGER = Logger.getLogger(Admin.class.getName());
 
-    /**
-     * Creates new form Admin
-     */
-    public Admin() {
-        initComponents();
-        startAutoLogoutCheck();    // Handles dynamic auto-logout functionality and countdown updates
-        loadSessionData();         // Load sessions into the JTable
-        updateStatistics();        // Update statistics
-    }
+// Example: Replace System.out.println with LOGGER
+public Admin() {
+    initComponents();
+    LOGGER.info("Initializing components.");
+    startAutoLogoutCheck();
+    loadSessionData();
+    updateStatistics();
+}
 
     private void loadSessionData() {
         System.out.println("Loading session data...");
@@ -164,12 +166,12 @@ public class Admin extends javax.swing.JFrame {
         jTextField3 = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        usnTop = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        amtTop = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        timeTop = new javax.swing.JTextField();
+        tpBtn = new javax.swing.JButton();
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
@@ -259,9 +261,12 @@ public class Admin extends javax.swing.JFrame {
 
         jLabel6.setText("TIME");
 
-        jTextField6.setText("jTextField6");
-
-        jButton1.setText("TOP UP");
+        tpBtn.setText("TOP UP");
+        tpBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tpBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -271,9 +276,9 @@ public class Admin extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                    .addComponent(usnTop, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField5))
+                    .addComponent(amtTop))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
@@ -282,8 +287,8 @@ public class Admin extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1))
+                            .addComponent(timeTop, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tpBtn))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
@@ -295,14 +300,14 @@ public class Admin extends javax.swing.JFrame {
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(usnTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(timeTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(amtTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tpBtn))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
 
@@ -327,6 +332,10 @@ public class Admin extends javax.swing.JFrame {
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
+
+    private void tpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tpBtnActionPerformed
+    processTopUp();        // TODO add your handling code here:
+    }//GEN-LAST:event_tpBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -361,43 +370,43 @@ public class Admin extends javax.swing.JFrame {
         });
     }
 
+
+
     private void startDynamicTimer() {
-        // Create a timer that updates the remaining time every second
-        dynamicTimer = new javax.swing.Timer(1000, e -> updateRemainingTime());
-        dynamicTimer.start(); // Start the timer
-    }
+    // Create a timer that updates the remaining time every second
+    dynamicTimer = new javax.swing.Timer(1000, e -> {
+        updateRemainingTime(); // Update countdown for each active session
+    });
+    dynamicTimer.start(); // Start the timer
+}
 
-    private void updateRemainingTime() {
-        DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
-        LocalTime currentTime = LocalTime.now();
+private void updateRemainingTime() {
+    DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
 
-        // Iterate through each row in the JTable
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            String remainingTimeStr = (String) tableModel.getValueAt(i, 2); // Get remaining time
+    for (int i = 0; i < tableModel.getRowCount(); i++) {
+        String remainingTimeStr = (String) tableModel.getValueAt(i, 2); // Get remaining time
+        LOGGER.log(Level.INFO, "Processing row {0} with remaining time: {1}", new Object[]{i, remainingTimeStr});
 
-            try {
-                // Parse the remaining time into a LocalTime object
-                LocalTime remainingTime = LocalTime.parse(remainingTimeStr);
-                long remainingSeconds = java.time.Duration.between(currentTime, remainingTime).getSeconds();
+        try {
+            LocalTime remainingTime = LocalTime.parse(remainingTimeStr); // Parse time
+            LocalTime updatedTime = remainingTime.minusSeconds(1); // Subtract 1 second
 
-                if (remainingSeconds > 0) {
-                    // Format remaining time back to HH:mm:ss and update the JTable
-                    String formattedTime = formatSecondsToTime((int) remainingSeconds);
-                    tableModel.setValueAt(formattedTime, i, 2);
-                } else {
-                    // If time has expired, set it to "00:00:00"
-                    tableModel.setValueAt("00:00:00", i, 2);
-                }
-            } catch (Exception ex) {
-                System.err.println("Error updating remaining time: " + ex.getMessage());
+            if (!updatedTime.isBefore(LocalTime.of(0, 0, 0))) { // If time is still valid
+                String formattedTime = updatedTime.toString();
+                tableModel.setValueAt(formattedTime, i, 2); // Update JTable
+                LOGGER.log(Level.INFO, "Updated remaining time for row {0}: {1}", new Object[]{i, formattedTime});
+            } else {
+                tableModel.setValueAt("00:00:00", i, 2); // Set to zero if expired
+                LOGGER.log(Level.WARNING, "Session expired for row {0}", i);
+                removeSessionFromTableAndJSON(i, (Integer) tableModel.getValueAt(i, 0)); // Remove session
             }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error processing remaining time for row {0}: {1}", new Object[]{i, e.getMessage()});
         }
     }
-
-    private String formatSecondsToTime(int seconds) {
-        return LocalTime.ofSecondOfDay(seconds).toString();
-    }
+}
 // Remove session from JTable and mark as inactive in JSON
+
 
     private void startAutoLogoutCheck() {
         // Create a timer that runs every second
@@ -421,37 +430,125 @@ public class Admin extends javax.swing.JFrame {
         }
     }
 
-    private void removeSessionFromTableAndJSON(int rowIndex, Integer pcNo) {
-        DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
-        tableModel.removeRow(rowIndex); // Remove the row from JTable
+   private void removeSessionFromTableAndJSON(int rowIndex, Integer pcNo) {
+    DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
+    tableModel.removeRow(rowIndex); // Remove the row from JTable
 
-        // Update the JSON file
-        try (FileReader reader = new FileReader(filepath)) {
-            JSONParser parser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) parser.parse(reader);
-            JSONArray sessions = (JSONArray) jsonObject.get("sessions");
+    // Update the JSON file
+    try (FileReader reader = new FileReader(filepath)) {
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(reader);
+        JSONArray sessions = (JSONArray) jsonObject.get("sessions");
 
-            // Find and update the session in the JSON array
-            for (Object obj : sessions) {
-                JSONObject session = (JSONObject) obj;
-                if (session.get("pcNo") != null && session.get("pcNo").toString().equals(pcNo.toString())) {
-                    session.put("active", false); // Mark as inactive
-                    session.put("remainingTime", "00:00:00"); // Set remaining time to 00:00:00
-                    break;
-                }
+        // Find and update the session in the JSON array
+        for (Object obj : sessions) {
+            JSONObject session = (JSONObject) obj;
+            if (session.get("pcNo") != null && session.get("pcNo").toString().equals(pcNo.toString())) {
+                session.put("active", false); // Mark as inactive
+                session.put("remainingTime", "00:00:00"); // Set remaining time to "00:00:00"
+                break;
             }
-
-            // Write the updated JSON back to the file
-            try (FileWriter writer = new FileWriter(filepath)) {
-                writer.write(jsonObject.toJSONString());
-                System.out.println("Updated JSON after session expiration for PC No " + pcNo);
-            }
-        } catch (IOException | ParseException e) {
-            System.err.println("Error updating JSON file for PC No " + pcNo + ": " + e.getMessage());
         }
+
+        // Write the updated JSON back to the file
+        try (FileWriter writer = new FileWriter(filepath)) {
+            writer.write(jsonObject.toJSONString());
+            LOGGER.info("Updated JSON after session expiration for PC No " + pcNo);
+        }
+    } catch (IOException | ParseException e) {
+        LOGGER.severe("Error updating JSON file for PC No " + pcNo + ": " + e.getMessage());
     }
+}
+   
+  
+   private void processTopUp() {
+    String username = usnTop.getText(); // Username field
+    String amountText = amtTop.getText(); // Amount field
+    final double RATE_PER_HOUR = 20.0; // Rate per hour
+
+    // Validate input
+    if (username.isEmpty() || amountText.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    double amount;
+    try {
+        amount = Double.parseDouble(amountText);
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Invalid amount entered.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Calculate time equivalent in HH:mm:ss format
+    int totalSeconds = (int) ((amount / RATE_PER_HOUR) * 3600);
+    String timeEquivalent = String.format("%02d:%02d:%02d", totalSeconds / 3600, (totalSeconds % 3600) / 60, totalSeconds % 60);
+
+    // Display calculated time equivalent in the time text field
+    timeTop.setText(timeEquivalent);
+
+    File file = new File(filepath);
+
+    if (!file.exists()) {
+        JOptionPane.showMessageDialog(this, "JSON file not found at: " + filepath, "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    try (FileReader reader = new FileReader(file)) {
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(reader);
+        JSONArray sessions = (JSONArray) jsonObject.get("sessions");
+
+        boolean userFound = false;
+
+        for (Object obj : sessions) {
+            JSONObject session = (JSONObject) obj;
+
+            if (session.get("username") != null && session.get("username").toString().equals(username)) {
+                // Update balance
+                Double currentBalance = session.get("balance") != null ? Double.valueOf(session.get("balance").toString()) : 0.0;
+                session.put("balance", currentBalance + amount);
+
+                // Update remaining time
+                String currentRemainingTime = session.get("remainingTime") != null ? session.get("remainingTime").toString() : "00:00:00";
+                LocalTime currentTime = LocalTime.parse(currentRemainingTime);
+                LocalTime incrementTime = LocalTime.parse(timeEquivalent);
+                LocalTime updatedTime = currentTime.plusHours(incrementTime.getHour())
+                        .plusMinutes(incrementTime.getMinute())
+                        .plusSeconds(incrementTime.getSecond());
+                session.put("remainingTime", updatedTime.toString());
+
+                // Update JTable
+                DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
+                for (int i = 0; i < tableModel.getRowCount(); i++) {
+                    Object usernameObj = tableModel.getValueAt(i, 1); // Column index for username
+                    if (usernameObj != null && usernameObj.toString().equals(username)) {
+                        tableModel.setValueAt(updatedTime.toString(), i, 2); // Update the "Remaining Time" column
+                        break;
+                    }
+                }
+
+                userFound = true;
+                break;
+            }
+        }
+
+        if (!userFound) {
+            JOptionPane.showMessageDialog(this, "User not found: " + username, "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Write updated JSON back to the file
+        try (FileWriter writer = new FileWriter(filepath)) {
+            writer.write(jsonObject.toJSONString());
+            JOptionPane.showMessageDialog(this, "User topped up successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        }
+    } catch (IOException | ParseException e) {
+        JOptionPane.showMessageDialog(this, "Error processing top-up: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JTextField amtTop;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -468,10 +565,10 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     private javax.swing.JButton logoutbtn;
+    private javax.swing.JTextField timeTop;
+    private javax.swing.JButton tpBtn;
     private javax.swing.JButton userBtn;
+    private javax.swing.JTextField usnTop;
     // End of variables declaration//GEN-END:variables
 }
