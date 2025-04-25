@@ -12,6 +12,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.time.format.DateTimeFormatter;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -219,7 +220,9 @@ public class Admin extends javax.swing.JFrame {
         }
     }
     
-    private void updateStatistics() {
+
+
+private void updateStatistics() {
     double totalRevenue = 0.0;
     int totalUsers = 0;
     int activeSessions = 0;
@@ -234,11 +237,9 @@ public class Admin extends javax.swing.JFrame {
     try (FileReader reader = new FileReader(file)) {
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
-        JSONArray sessions = (JSONArray) jsonObject.get("sessions");
-        JSONArray users = (JSONArray) jsonObject.get("users"); // Users array for cross-reference
 
-        // Today's date for comparison
-        String todayDate = LocalDate.now().toString();
+        JSONArray sessions = (JSONArray) jsonObject.get("sessions");
+        JSONArray users = (JSONArray) jsonObject.get("users"); // Cross-reference users array
 
         if (sessions != null) {
             totalUsers = sessions.size();
@@ -246,42 +247,40 @@ public class Admin extends javax.swing.JFrame {
             for (Object sessionObj : sessions) {
                 JSONObject session = (JSONObject) sessionObj;
 
-                // Check if the session is active
+                // Count active sessions
                 Boolean isActive = (Boolean) session.get("active");
                 if (Boolean.TRUE.equals(isActive)) {
                     activeSessions++;
                 }
+            }
+        }
 
-                // Get the username from the session
-                String username = (String) session.get("username");
-                if (username != null) {
-                    // Cross-check with the users array
-                    for (Object userObj : users) {
-                        JSONObject user = (JSONObject) userObj;
+        if (users != null) {
+            String todayDate = LocalDate.now().toString();
 
-                        if (username.equals(user.get("username"))) {
-                            // Check if the user's last login matches today's date
-                            String lastLogin = (String) user.get("lastLogin");
-                            if (lastLogin != null && lastLogin.startsWith(todayDate)) {
-                                // Add the balance from the session to total revenue
-                                Double balance = user.get("amount") != null
-                                        ? Double.valueOf(user.get("amount").toString())
-                                        : 0.0;
-                                totalRevenue += balance;
+            for (Object userObj : users) {
+                JSONObject user = (JSONObject) userObj;
 
-                                // Debugging logs
-                                System.out.println("Username: " + username);
-                                System.out.println("Last Login: " + lastLogin);
-                                System.out.println("Balance Added: " + balance);
-                            }
-                            break; // Move to the next session after finding the user
-                        }
+                String lastLogin = (String) user.get("lastLogin");
+                Double balance = user.get("amount") != null
+                    ? Double.valueOf(user.get("amount").toString())
+                    : 0.0;
+
+                if (lastLogin != null) {
+                    // Handle both "T" and space as separators in the timestamp
+                    String lastLoginDate = lastLogin.contains("T")
+                        ? lastLogin.split("T")[0]
+                        : lastLogin.split(" ")[0];
+
+                    if (lastLoginDate.equals(todayDate)) {
+                        totalRevenue += balance;
+                        System.out.println("Adding Balance for User: " + user.get("username") + ", Balance: " + balance);
                     }
                 }
             }
         }
 
-        // Update the fields
+        // Update the UI fields
         jTextField1.setText(String.format("%.2f", totalRevenue)); // Total Revenue
         jTextField2.setText(String.valueOf(activeSessions));      // Active Sessions
         jTextField3.setText(String.valueOf(totalUsers));          // Total Users
@@ -289,6 +288,7 @@ public class Admin extends javax.swing.JFrame {
         showError("Error updating statistics: " + e.getMessage());
     }
 }
+  
     /**
      * Utility methods for JSON parsing.
      */
